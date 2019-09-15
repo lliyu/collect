@@ -53,9 +53,8 @@ public class UserServiceImpl  implements UserService {
      */
     public Object login(UserInfoDto user) {
         UserInfoDto userInfoDto = userMapper.getUser(user.getUsername());
-        if(user == null || !(user.getPassword().equals(userInfoDto.getPassword())))
+        if(user == null || !(user.getPassword().equals((userInfoDto.getPassword()))))
             throw new BizException("用户名或密码错误！");
-
         // 登录日志
         LoginLog loginLog = new LoginLog();
         loginLog.setUid(userInfoDto.getId());

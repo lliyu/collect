@@ -53,7 +53,7 @@ public class SysController {
     /**
      * @desc: 查询属性
      */
-    @RequestMapping(value = "/findAttributesByPage" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/attr/list" ,method = RequestMethod.GET)
     public PageInfo<Attribute> findAttributesByPage(ParamsDto dto) {
         PageInfo<Attribute> list = attributeService.findAttributesByPage(dto);
         return list;
@@ -62,7 +62,7 @@ public class SysController {
     /**
      * @desc: 查询属性明细
      */
-    @RequestMapping(value = "/findAttributesDetailByPage" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/attr/detail/list" ,method = RequestMethod.GET)
     public PageInfo<AttributeDetail> findAttributesDetailByPage(ParamsDto dto) {
 
         PageInfo<AttributeDetail> list = attributeDetailService.findAttributeDetailByPage(dto);
@@ -72,7 +72,7 @@ public class SysController {
     /**
      * @desc: 新增属性
      */
-    @RequestMapping(value = "/addAttributes" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/attr/add" ,method = RequestMethod.POST)
     public Object addAttributes(@Valid Attribute attribute, BindingResult bindingResult) {
         return attributeService.addAttributes(attribute);
     }
@@ -80,7 +80,7 @@ public class SysController {
     /**
      * @desc: 新增属性明细
      */
-    @RequestMapping(value = "/addAttributeDetail" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/attr/detail/add" ,method = RequestMethod.POST)
     public Object addAttributeDetail(@Valid AttributeDetailVo vo, BindingResult bindingResult) {
         return attributeDetailService.addAttributeDetail(vo);
     }
@@ -88,7 +88,7 @@ public class SysController {
     /**
      * @desc: 删除属性
      */
-    @RequestMapping(value = "/delAttributes",method = RequestMethod.POST)
+    @RequestMapping(value = "/attr/delete",method = RequestMethod.POST)
     public Object delAttributes(ParamsDto dto) {
         if (null == dto.getIds() || dto.getIds().length == 0) {
             return new BaseResponse(StatusCode.BAD_REQUEST.getValue(), StatusCode.BAD_REQUEST.getMsg());
@@ -99,7 +99,7 @@ public class SysController {
     /**
      * @desc: 删除属性明细
      */
-    @RequestMapping(value = "/delAttributeDetails",method = RequestMethod.POST)
+    @RequestMapping(value = "/attr/detail/delete",method = RequestMethod.POST)
     public Object delAttributeDetails(ParamsDto dto) {
         if (null == dto.getIds() || dto.getIds().length == 0) {
             return new BaseResponse(StatusCode.BAD_REQUEST.getValue(), StatusCode.BAD_REQUEST.getMsg());
@@ -110,7 +110,7 @@ public class SysController {
    /**
     * @desc: 根据属性id查询属性
     */
-    @RequestMapping(value = "/findAttributeDetailByAttrId",method = RequestMethod.GET)
+    @RequestMapping(value = "/attr/detail/info",method = RequestMethod.GET)
     public Object selAttributeDetailsByAttrId(ParamsDto dto) {
         if (StringUtils.isEmpty(dto.getId())) {
             return new BaseResponse(StatusCode.BAD_REQUEST.getValue(), StatusCode.BAD_REQUEST.getMsg());
@@ -125,7 +125,7 @@ public class SysController {
     /**
      * 查询操作记录
      */
-    @RequestMapping(value = "/findOperatingRecordByPage" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/record/list" ,method = RequestMethod.GET)
     public PageInfo<OperatingRecord> findOperatingRecordByPage(ParamsDto dto) {
 
         PageInfo<OperatingRecord> list = operatingRecordService.findOperatingRecordByPage(dto);
@@ -136,7 +136,7 @@ public class SysController {
     /**
      * 用户登录日志
      */
-    @RequestMapping(value = "/findUserLoginLogByPage", method = RequestMethod.GET)
+    @RequestMapping(value = "/login/logs", method = RequestMethod.GET)
     public PageInfo<LoginLog> findUserLoginLogByPage(ParamsDto dto) {
         PageInfo<LoginLog> list = loginLogService.findUserLoginLogByPage(dto);
         return list;
@@ -146,7 +146,7 @@ public class SysController {
     /**
      * 统计用户登录
      */
-    @RequestMapping(value = "/findUserLoginTotal", method = RequestMethod.GET)
+    @RequestMapping(value = "/login/total", method = RequestMethod.GET)
     public Object findUserLoginTotal() {
         return loginLogService.findUserLoginTotal();
     }
@@ -154,7 +154,7 @@ public class SysController {
     /**
      * 访问统计
      */
-    @RequestMapping(value = "/findUserReqTotal", method = RequestMethod.GET)
+    @RequestMapping(value = "/request/total", method = RequestMethod.GET)
     public Object findUserReqTotal() {
         return operatingRecordService.findUserReqTotal();
     }

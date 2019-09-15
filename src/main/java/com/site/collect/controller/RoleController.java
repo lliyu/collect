@@ -32,7 +32,7 @@ public class RoleController {
     /**
      * @desc: 查询角色
      */
-    @RequestMapping(value = "/findRoleByPage" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/list" ,method = RequestMethod.GET)
     public PageInfo<Role> findRoleByPage(ParamsDto dto) {
 
         PageInfo<Role> list = roleService.findRoleByPage(dto);
@@ -42,7 +42,7 @@ public class RoleController {
     /**
      * @desc: 新增角色
      */
-    @RequestMapping(value = "/addRoles" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/add" ,method = RequestMethod.POST)
     public Object addRoles(@Valid RoleVo vo, BindingResult bindingResult) {
         return roleService.addRoles(vo);
     }
@@ -50,7 +50,7 @@ public class RoleController {
     /**
      * @desc: 删除角色
      */
-    @RequestMapping(value = "/delRoles",method = RequestMethod.POST)
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public Object delRoles(ParamsDto dto) {
         if (null == dto.getIds() || dto.getIds().length == 0) {
             return new BaseResponse(StatusCode.BAD_REQUEST.getValue(), StatusCode.BAD_REQUEST.getMsg());
@@ -64,7 +64,7 @@ public class RoleController {
      * @param dto
      * @return
      */
-    @RequestMapping(value = "/findRolesPermisByRole",method = RequestMethod.GET)
+    @RequestMapping(value = "/rolePermission",method = RequestMethod.GET)
     public Object findRolesPermisByRole(ParamsDto dto) {
         if (null == dto.getId()) {
             return new BaseResponse(StatusCode.BAD_REQUEST.getValue(), StatusCode.BAD_REQUEST.getMsg());

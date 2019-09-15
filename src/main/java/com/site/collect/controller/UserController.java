@@ -88,7 +88,7 @@ public class UserController {
      *
      * @param dto 参数dto
      */
-    @RequestMapping(value = "/findUserByPage",method = RequestMethod.GET)
+    @RequestMapping(value = "/list",method = RequestMethod.GET)
     public PageInfo<UserDto> findUserByPage(ParamsDto dto) {
         dto.setType(RoleType.USER.getValue());
         PageInfo<UserDto> list = userService.findUserByPage(dto);
@@ -98,7 +98,7 @@ public class UserController {
     /**
      * @desc: 新增用户
      */
-    @RequestMapping(value = "/addUser",method = RequestMethod.POST)
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
     public Object addUser(@Valid UserVo userVo, BindingResult bindingResult) {
         return userService.addUser(userVo);
     }
@@ -106,7 +106,7 @@ public class UserController {
     /**
      * @desc: 批量删除用户
      */
-    @RequestMapping(value = "/delUsers",method = RequestMethod.POST)
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public Object delUsers(ParamsDto dto) {
         if (null == dto.getIds() || dto.getIds().length == 0) {
             return new BaseResponse(StatusCode.BAD_REQUEST.getValue(), StatusCode.BAD_REQUEST.getMsg());
@@ -128,7 +128,7 @@ public class UserController {
     /**
      * 用户修改用户个人信息
      */
-    @RequestMapping(value = "/editUserInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public Object editUserInfo(UserInfoVo vo) {
         return userService.editUserInfo(vo);
     }

@@ -29,7 +29,7 @@ public class PermissionController {
      * @desc: 查询权限
      */
     @ResponseBody
-    @RequestMapping(value = "/findPermissionByPage" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/list" ,method = RequestMethod.GET)
     public PageInfo<Permission> findPermissionByPage(ParamsDto dto) {
 
         PageInfo<Permission> list = permissionService.findPermissionByPage(dto);
@@ -40,7 +40,7 @@ public class PermissionController {
      * @desc: 新增权限
      */
     @ResponseBody
-    @RequestMapping(value = "/addPermissions" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/add" ,method = RequestMethod.POST)
     public Object addPermissions(@Valid PermisVo vo, BindingResult bindingResult) {
 //      vo.setUserName(super.getUserName());
 //      vo.setUserId(super.getUserId());
@@ -51,7 +51,7 @@ public class PermissionController {
      * @desc: 删除权限项
      */
     @ResponseBody
-    @RequestMapping(value = "/delPermis",method = RequestMethod.POST)
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public Object delPermis(ParamsDto dto) {
         if (null == dto.getIds() || dto.getIds().length == 0) {
             return new BaseResponse(StatusCode.BAD_REQUEST.getValue(), StatusCode.BAD_REQUEST.getMsg());
@@ -63,7 +63,7 @@ public class PermissionController {
      * @desc: 查询父级菜单为0的所有菜单权限
      */
     @ResponseBody
-    @RequestMapping(value = "/findLastPermissionByType" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/root" ,method = RequestMethod.GET)
     public Object findAllBasePermission(String type) {
         List<Permission> list = permissionService.findLastPermissionByType(type);
         if (null == list ||list.isEmpty()) {
