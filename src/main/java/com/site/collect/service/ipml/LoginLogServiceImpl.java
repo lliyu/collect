@@ -27,7 +27,7 @@ public class LoginLogServiceImpl implements LoginLogService {
      * @param id
      * @return
      */
-    public Integer findMaxLoginTatalByUserId(String id) {
+    public Integer findMaxLoginTatalByUserId(Long id) {
         return loginLogMapper.findMaxLoginTatalByUserId(id);
     }
 

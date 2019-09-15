@@ -13,7 +13,7 @@ public interface RoleService {
 
     Object addRoles(RoleVo vo);
 
-    Object delRole(String[] ids);
+    Object delRole(Long[] ids);
 
     List<Role> findAllRoles();
 }

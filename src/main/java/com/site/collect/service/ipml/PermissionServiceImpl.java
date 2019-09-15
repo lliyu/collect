@@ -7,7 +7,7 @@ import com.site.collect.entity.Permission;
 import com.site.collect.mapper.PermissionMapper;
 import com.site.collect.pojo.dto.ParamsDto;
 import com.site.collect.pojo.dto.PermisDto;
-import com.site.collect.pojo.vo.PermisVo;
+import com.site.collect.pojo.vo.PermissionVo;
 import com.site.collect.response.BaseResponse;
 import com.site.collect.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +38,13 @@ public class PermissionServiceImpl implements PermissionService {
     /**
      * @desc: 添加权限项
      */
-    public Object addPermissions(PermisVo vo) {
+    public Object addPermissions(PermissionVo vo) {
 
         Permission p = new Permission();
         p.setName(vo.getName());
         p.setUrl(vo.getUrl());
         p.setType(vo.getType());
-        p.setFatherId(vo.getLastId());
+        p.setFatherId(vo.getfId());
         p.setCreateTime(new Date());
         p.setCreater(vo.getUserName());
         permissionMapper.insert(p);
@@ -56,9 +56,9 @@ public class PermissionServiceImpl implements PermissionService {
      * @desc: 删除权限项
      *
      */
-    public Object delPermis(String[] ids) {
+    public Object delPermis(Long[] ids) {
 
-        for (String id : ids) {
+        for (Long id : ids) {
             permissionMapper.deleteByPrimaryKey(id);
         }
         return new BaseResponse(StatusCode.OK.getValue(), "删除成功");

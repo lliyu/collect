@@ -15,7 +15,7 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-	private String id;
+	private Long id;
     /**
      * 头像
      */
@@ -52,7 +52,7 @@ public class User implements Serializable {
      * 角色id
      */
     @Transient
-	private String rid;
+	private Long rid;
 
 	/**
 	 * 角色名称
@@ -73,13 +73,20 @@ public class User implements Serializable {
         this.headPortraits = headPortraits;
     }
 
-
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getRid() {
+		return rid;
+	}
+
+	public void setRid(Long rid) {
+		this.rid = rid;
 	}
 
 	public String getNickname() {
@@ -122,14 +129,6 @@ public class User implements Serializable {
 		this.lastLoginTime = lastLoginTime;
 	}
 
-    public String getRid() {
-        return rid;
-    }
-
-    public void setRid(String rid) {
-        this.rid = rid;
-    }
-
 	public Integer getStatus() {
 		return status;
 	}
@@ -153,22 +152,6 @@ public class User implements Serializable {
 	public void setType(Integer type) {
 		this.type = type;
 	}
-
-	public static final String ID = "id";
-
-    public static final String HEAD_PORTRAITS = "head_portraits";
-
-	public static final String NICKNAME = "nickname";
-
-	public static final String EMAIL = "email";
-
-	public static final String PSWD = "pswd";
-
-	public static final String CREATE_TIME = "create_time";
-
-	public static final String LAST_LOGIN_TIME = "last_login_time";
-
-	public static final String STATUS = "status";
 
 	@Override
 	public String toString() {

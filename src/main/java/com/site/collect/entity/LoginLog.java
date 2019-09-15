@@ -1,6 +1,7 @@
 package com.site.collect.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
@@ -15,11 +16,12 @@ public class LoginLog implements Serializable{
     /**
      * id
      */
-    private String id;
+    @Id
+    private Long id;
     /**
      * 用户id
      */
-    private String uid;
+    private Long uid;
     /**
      * 登录时间
      */
@@ -43,20 +45,19 @@ public class LoginLog implements Serializable{
     @Transient
     private String userName;
 
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getUid() {
+    public Long getUid() {
         return uid;
     }
 
-    public void setUid(String uid) {
+    public void setUid(Long uid) {
         this.uid = uid;
     }
 

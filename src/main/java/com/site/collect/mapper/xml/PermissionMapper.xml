@@ -7,10 +7,10 @@
 		<id column="id" property="id" />
 		<result column="url" property="url" />
 		<result column="name" property="name" />
-		<result column="fatherId" property="fatherId" />
+		<result column="fid" property="fatherId" />
 		<result column="sort" property="sort" />
 		<result column="type" property="type" />
-        <result column="iconCls" property="type"/>
+        <result column="icon_cls" property="type"/>
 	</resultMap>
 
 	<!--分页查询菜单-->

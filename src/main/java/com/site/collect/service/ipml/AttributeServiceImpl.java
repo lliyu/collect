@@ -44,8 +44,8 @@ public class AttributeServiceImpl implements AttributeService {
      * @desc: 删除属性
      */
     @Transactional
-    public Object delAttributes(String[] ids) {
-        for (String id : ids) {
+    public Object delAttributes(Long[] ids) {
+        for (Long id : ids) {
             attributeMapper.deleteByPrimaryKey(id);
             List<AttributeDetailDto> list = attributeDetailService.findAttributeDetailByAttrId(id);
             if (null != list && !list.isEmpty()) {

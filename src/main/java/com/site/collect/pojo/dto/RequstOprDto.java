@@ -16,9 +16,9 @@ public class RequstOprDto {
      */
     private int value;
 
-    private ArrayList Metlist;
+    private ArrayList netList;
 
-    private ArrayList Usrlist;
+    private ArrayList usrList;
 
     /**
      * 名称
@@ -41,20 +41,20 @@ public class RequstOprDto {
         this.value = value;
     }
 
-    public ArrayList getMetlist() {
-        return Metlist;
+    public ArrayList getNetList() {
+        return netList;
     }
 
-    public void setMetlist(ArrayList metlist) {
-        Metlist = metlist;
+    public void setNetList(ArrayList netList) {
+        this.netList = netList;
     }
 
-    public ArrayList getUsrlist() {
-        return Usrlist;
+    public ArrayList getUsrList() {
+        return usrList;
     }
 
-    public void setUsrlist(ArrayList usrlist) {
-        Usrlist = usrlist;
+    public void setUsrList(ArrayList usrList) {
+        this.usrList = usrList;
     }
 
     public String[] getArrName() {

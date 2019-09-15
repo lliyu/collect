@@ -10,7 +10,7 @@ import java.util.List;
 public interface LoginLogMapper extends Mapper<LoginLog> {
 
 
-    Integer findMaxLoginTatalByUserId(@Param("id") String id);
+    Integer findMaxLoginTatalByUserId(@Param("id") Long id);
 
     List<LoginLog> findUserLoginLogByPage(@Param("dto") ParamsDto dto);
 

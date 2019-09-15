@@ -10,13 +10,11 @@ public class RoleVo {
     /**
      * 名称
      */
-    @NotEmpty(message = "角色名称不能为空")
     private String name;
 
     /**
      * 描述
      */
-    @NotEmpty(message = "角色描述不能为空")
     private String description;
 
     /**

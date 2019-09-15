@@ -12,5 +12,5 @@ public interface AttributeDetailMapper extends Mapper<AttributeDetail> {
 
     List<AttributeDetail> findAttributeDetailByPage(@Param("dto") ParamsDto dto);
 
-    List<AttributeDetailDto> findAttributeDetailByAttrId(@Param("attrId") String attrId);
+    List<AttributeDetailDto> findAttributeDetailByAttrId(@Param("attrId") Long attrId);
 }

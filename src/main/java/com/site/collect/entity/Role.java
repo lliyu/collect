@@ -1,5 +1,6 @@
 package com.site.collect.entity;
 
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -9,7 +10,8 @@ public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-	private String id;
+    @Id
+	private Long id;
     /**
      * 角色名称
      */
@@ -24,12 +26,11 @@ public class Role implements Serializable {
 	 */
 	private String description;
 
-
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

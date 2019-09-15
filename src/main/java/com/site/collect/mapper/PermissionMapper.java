@@ -33,7 +33,7 @@ public interface PermissionMapper extends Mapper<Permission> {
     /**
      * @desc: 根据父级id查询菜单
      */
-    List<PermisDto> findPermissionByFatherId(@Param("fatherId") String fatherId);
+    List<PermisDto> findPermissionByFatherId(@Param("fatherId") Long fatherId);
 
     /**
      * 根据url查询记录

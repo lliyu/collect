@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class UserDto  implements Serializable{
 
-	private String id;
+	private Long id;
     /**
      * 用户昵称
      */
@@ -43,11 +43,11 @@ public class UserDto  implements Serializable{
 	 */
 	private String role;
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

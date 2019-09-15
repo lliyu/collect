@@ -1,9 +1,5 @@
 package com.site.collect.pojo.vo;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
-
 
 /**
  * @desc: 用户vo
@@ -13,17 +9,14 @@ public class UserVo {
     /**
      * 用户昵称
      */
-    @NotEmpty(message = "用户名不能为空")
     private String name;
     /**
      * 邮箱|登录帐号
      */
-    @Email(message = "邮箱格式不正确")
     private String email;
     /**
      * 密码
      */
-    @NotEmpty(message = "密码不能为空")
     // @Pattern(regexp = "^[a-zA-Z]\\w{5,17}$", message = "密码以字母开头，长度在6~18之间，只能包含字符、数字和下划线")
     private String pass;
 
@@ -35,8 +28,7 @@ public class UserVo {
     /**
      * 用户角色
      */
-    @NotBlank(message = "请选择用户角色")
-    private String role;
+    private Long roleId;
 
     public String getName() {
         return name;
@@ -70,11 +62,11 @@ public class UserVo {
         this.status = status;
     }
 
-    public String getRole() {
-        return role;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 }

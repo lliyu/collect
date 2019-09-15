@@ -5,7 +5,7 @@ import com.site.collect.Enum.StatusCode;
 import com.site.collect.entity.Permission;
 import com.site.collect.pojo.dto.ParamsDto;
 import com.site.collect.pojo.dto.PermisDto;
-import com.site.collect.pojo.vo.PermisVo;
+import com.site.collect.pojo.vo.PermissionVo;
 import com.site.collect.response.BaseResponse;
 import com.site.collect.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class PermissionController {
      */
     @ResponseBody
     @RequestMapping(value = "/add" ,method = RequestMethod.POST)
-    public Object addPermissions(@Valid PermisVo vo, BindingResult bindingResult) {
+    public Object addPermissions(@Valid PermissionVo vo, BindingResult bindingResult) {
 //      vo.setUserName(super.getUserName());
 //      vo.setUserId(super.getUserId());
       return permissionService.addPermissions(vo);

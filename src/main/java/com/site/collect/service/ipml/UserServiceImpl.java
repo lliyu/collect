@@ -24,7 +24,6 @@ import com.site.collect.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
 
 import java.util.*;
 
@@ -43,7 +42,7 @@ public class UserServiceImpl  implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public User get(String id) {
+    public User get(Long id) {
         return userMapper.selectByPrimaryKey(id);
     }
 
@@ -67,7 +66,7 @@ public class UserServiceImpl  implements UserService {
         List<RolePermisDto> parentList = rolePermissionService.findRolesPermisByFatherId(null, null);
         List<RolePermisDto> sonList = null;
         List<RolePermisDto> sonssonList = null;
-        String rid = userInfoDto.getRoleName().equals("admin") ? null : userInfoDto.getRoleid();
+        Long rid = userInfoDto.getRoleName().equals("admin") ? null : userInfoDto.getRoleid();
         for (int i = 0, j = parentList.size(); i < j; i++) {
 
             List<RolePermisDto> trueChildrenList = new ArrayList<>();
@@ -108,7 +107,7 @@ public class UserServiceImpl  implements UserService {
 
         UserRole ur = new UserRole();
         ur.setUid(user.getId());
-        ur.setRid(vo.getRole());
+        ur.setRid(vo.getRoleId());
         Boolean result =  userRoleService.insert(ur);
 
         if (!result) {
@@ -125,8 +124,8 @@ public class UserServiceImpl  implements UserService {
     }
 
 
-    public Object delUsers(String[] ids) {
-        for (String id : ids) {
+    public Object delUsers(Long[] ids) {
+        for (Long id : ids) {
             userMapper.deleteByPrimaryKey(id);
         }
         return new BaseResponse(StatusCode.OK.getValue(), "删除成功");
@@ -137,7 +136,7 @@ public class UserServiceImpl  implements UserService {
    }
 
 
-    public Object editUserStatus(String id, Integer type) {
+    public Object editUserStatus(Long id, Integer type) {
         User user = new User();
         user.setId(id);
         user.setStatus(type);

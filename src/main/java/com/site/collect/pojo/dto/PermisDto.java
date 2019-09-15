@@ -6,7 +6,8 @@ import java.util.ArrayList;
  * @desc: 菜单dto
  */
 public class PermisDto {
-    private String id;
+
+    private Long id;
 
     /**
      * 菜单名称
@@ -18,11 +19,11 @@ public class PermisDto {
      */
     private ArrayList<PermisDto> children;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

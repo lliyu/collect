@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class RolePermisDto {
 
-    private String id;
+    private Long id;
 
     /**
      * name
@@ -29,12 +29,11 @@ public class RolePermisDto {
      */
     private ArrayList<RolePermisDto> children;
 
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

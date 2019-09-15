@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class UserInfoDto {
 
 
-    private String id;
+    private Long id;
 
     /**
      * 用户头像
@@ -38,10 +38,10 @@ public class UserInfoDto {
     /**
      * 角色id
      */
-    private String roleid;
+    private Long roleid;
 
     /**
-     * 用户角色
+     * 用户角色名称
      */
     private String roleName;
 
@@ -55,12 +55,20 @@ public class UserInfoDto {
      */
     private ArrayList<RolePermisDto> rolePermis;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getRoleid() {
+        return roleid;
+    }
+
+    public void setRoleid(Long roleid) {
+        this.roleid = roleid;
     }
 
     public String getUsername() {
@@ -85,14 +93,6 @@ public class UserInfoDto {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getRoleid() {
-        return roleid;
-    }
-
-    public void setRoleid(String roleid) {
-        this.roleid = roleid;
     }
 
     public String getRoleName() {

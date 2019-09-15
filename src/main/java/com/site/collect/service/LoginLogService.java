@@ -12,7 +12,7 @@ public interface LoginLogService {
      * 查询登录次数
      *
      */
-    Integer findMaxLoginTatalByUserId(String id);
+    Integer findMaxLoginTatalByUserId(Long id);
 
 
     /**

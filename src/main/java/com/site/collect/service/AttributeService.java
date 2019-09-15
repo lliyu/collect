@@ -10,6 +10,6 @@ public interface AttributeService {
 
     Object addAttributes(Attribute attribute);
 
-    Object delAttributes(String[] ids);
+    Object delAttributes(Long[] ids);
 
 }

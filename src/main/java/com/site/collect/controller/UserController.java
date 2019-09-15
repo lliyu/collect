@@ -77,7 +77,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/info/{id}",method = RequestMethod.GET)
-    public BaseResponse get(@PathVariable("id") String id) {
+    public BaseResponse get(@PathVariable("id") Long id) {
         User user = userService.get(id);
         return new BaseResponse(200, "", user);
     }

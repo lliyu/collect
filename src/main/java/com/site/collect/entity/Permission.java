@@ -1,6 +1,7 @@
 package com.site.collect.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
@@ -12,7 +13,8 @@ public class Permission implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-	private String id;
+    @Id
+	private Long id;
     /**
      * url描述
      */
@@ -30,7 +32,7 @@ public class Permission implements Serializable {
      * 上级菜单id
      */
 	@Column(name = "fid")
-	private String fatherId;
+	private Long fatherId;
     /**
      * 排序
      */
@@ -76,13 +78,20 @@ public class Permission implements Serializable {
 	@Transient
 	private String typeName;
 
-
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getFatherId() {
+		return fatherId;
+	}
+
+	public void setFatherId(Long fatherId) {
+		this.fatherId = fatherId;
 	}
 
 	public String getName() {
@@ -107,14 +116,6 @@ public class Permission implements Serializable {
 
 	public void setRequestType(String requestType) {
 		this.requestType = requestType;
-	}
-
-	public String getFatherId() {
-		return fatherId;
-	}
-
-	public void setFatherId(String fatherId) {
-		this.fatherId = fatherId;
 	}
 
 	public Integer getSort() {
@@ -188,28 +189,6 @@ public class Permission implements Serializable {
     public void setIconCls(String iconCls) {
         this.iconCls = iconCls;
     }
-
-	public static final String ID = "id";
-
-	public static final String NAME = "name";
-
-	public static final String URL = "url";
-
-	public static final String REQUESTTYPE = "requestType";
-
-	public static final String FATHERID = "fatherId";
-
-	public static final String SORT = "sort";
-
-	public static final String TYPE = "type";
-
-	public static final String CREATE_TIME = "create_time";
-
-	public static final String UPDATE_TIME = "update_time";
-
-	public static final String CREATER = "creater";
-
-	public static final String UPDATER = "updater";
 
 	@Override
 	public String toString() {

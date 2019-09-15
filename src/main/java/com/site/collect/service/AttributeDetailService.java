@@ -15,9 +15,9 @@ public interface AttributeDetailService {
 
     Object addAttributeDetail(AttributeDetailVo attributeDetail);
 
-    List<AttributeDetailDto> findAttributeDetailByAttrId(String attrId);
+    List<AttributeDetailDto> findAttributeDetailByAttrId(Long attrId);
 
-    Object delAttributeDetails(String[] ids);
+    Object delAttributeDetails(Long[] ids);
 
     void deleteAttrById(Long id);
 }

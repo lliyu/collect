@@ -10,19 +10,17 @@ public class AttributeDetailVo {
     /**
      * 属性id
      */
-    @NotBlank(message = "属性id不能为空")
-    private String id;
+    private Long id;
     /**
      * 属性明细名称
      */
-    @NotBlank(message = "属性明细名称不能为空")
     private String name;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

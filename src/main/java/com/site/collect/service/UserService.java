@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface UserService {
 
-    User get(String id);
+    User get(Long id);
 
     Object login(UserInfoDto infoDto);
 
@@ -21,11 +21,11 @@ public interface UserService {
 
     PageInfo<UserDto> findUserByPage(ParamsDto dto);
 
-    Object delUsers(String[] ids);
+    Object delUsers(Long[] ids);
 
     List<UserInfoDto> checkUser(String name, String pass);
 
-    Object editUserStatus(String id, Integer type);
+    Object editUserStatus(Long id, Integer type);
 
     Object editUserInfo(UserInfoVo vo);
 }

@@ -37,8 +37,8 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     @Transactional
     public Object addRolesPermis(RolePermisVo vo) {
         RolePermission rp = null;
-        String roleId = vo.getRoleId();
-        String[] permisIds = vo.getPermiIds()==null?new String[0]:vo.getPermiIds();
+        Long roleId = vo.getRoleId();
+        Long[] permisIds = vo.getPermiIds()==null?new Long[0]:vo.getPermiIds();
 
         Map<String,Object> map = new HashMap<>();
         map.put("rid",roleId);
@@ -58,14 +58,14 @@ public class RolePermissionServiceImpl implements RolePermissionService {
      * @param roleId
      * @return
      */
-    public Integer findCountByRole(String roleId,String url) {
+    public Integer findCountByRole(Long roleId,String url) {
         return rolePermissionMapper.findCountByRole(roleId, url);
     }
 
     /**
      * 根据父id\角色id查询角色菜单
      */
-    public List<RolePermisDto> findRolesPermisByFatherId(String fatherId, String rid) {
+    public List<RolePermisDto> findRolesPermisByFatherId(Long fatherId, Long rid) {
         return rolePermissionMapper.findRolesPermisByFatherId(fatherId, rid);
     }
 }

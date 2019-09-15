@@ -57,8 +57,8 @@ public class OperatingRecordServiceImpl implements OperatingRecordService {
 
         RequstOprDto r = new RequstOprDto();
         List<RequstOprDto> reqData3 = new ArrayList<>();
-        r.setMetlist((ArrayList) reqData1);
-        r.setUsrlist((ArrayList) reqData2);
+        r.setNetList((ArrayList) reqData1);
+        r.setUsrList((ArrayList) reqData2);
         r.setArrName(arrNa);
         reqData3.add(r);
 

@@ -39,7 +39,7 @@ public class OperatingRecord implements Serializable {
     /**
      * 用户id
      */
-    private String uid;
+    private Long uid;
     /**
      * 标识
      */
@@ -106,13 +106,13 @@ public class OperatingRecord implements Serializable {
 		this.createTime = createTime;
 	}
 
-    public String getUid() {
-        return uid;
-    }
+	public Long getUid() {
+		return uid;
+	}
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
+	public void setUid(Long uid) {
+		this.uid = uid;
+	}
 
 	public String getFlag() {
 		return flag;
@@ -137,22 +137,6 @@ public class OperatingRecord implements Serializable {
     public void setPermName(String permName) {
         this.permName = permName;
     }
-
-	public static final String ID = "id";
-
-	public static final String REQUESTURL = "requestUrl";
-
-	public static final String REMOTEADDR = "remoteAddr";
-
-	public static final String PARAMS = "params";
-
-	public static final String METHOD = "method";
-
-	public static final String CREATE_TIME = "create_time";
-
-    public static final String UID = "uid";
-
-	public static final String FLAG = "flag";
 
 	@Override
 	public String toString() {

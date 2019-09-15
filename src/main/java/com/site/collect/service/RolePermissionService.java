@@ -13,7 +13,7 @@ public interface RolePermissionService {
     Object addRolesPermis(RolePermisVo vo);
     List<RolePermission> findRolesPermisByRole(ParamsDto dto);
 
-    Integer findCountByRole(String roleId,String url);
+    Integer findCountByRole(Long roleId,String url);
 
-    List<RolePermisDto> findRolesPermisByFatherId(String fatherId, String rid);
+    List<RolePermisDto> findRolesPermisByFatherId(Long fatherId, Long rid);
 }

@@ -10,27 +10,26 @@ public class RolePermisVo {
     /**
      * 角色id
      */
-    @NotBlank(message = "角色id不能为空")
-    private String roleId;
+    private Long roleId;
 
     /**
      * 菜单ids
      */
-    private String[] permiIds;
+    private Long[] permiIds;
 
-    public String getRoleId() {
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 
-    public String[] getPermiIds() {
+    public Long[] getPermiIds() {
         return permiIds;
     }
 
-    public void setPermiIds(String[] permiIds) {
+    public void setPermiIds(Long[] permiIds) {
         this.permiIds = permiIds;
     }
 }

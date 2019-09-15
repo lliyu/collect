@@ -11,12 +11,12 @@ public class ParamsDto implements Serializable{
     /**
      * id
      */
-    private String id;
+    private Long id;
 
     /**
      * id数组
      */
-    private String[] ids;
+    private Long[] ids;
 
     /**
      * 类型
@@ -43,19 +43,19 @@ public class ParamsDto implements Serializable{
      */
     private Integer pageSize;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String[] getIds() {
+    public Long[] getIds() {
         return ids;
     }
 
-    public void setIds(String[] ids) {
+    public void setIds(Long[] ids) {
         this.ids = ids;
     }
 

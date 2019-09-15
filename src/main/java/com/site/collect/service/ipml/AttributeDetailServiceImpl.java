@@ -47,16 +47,16 @@ public class AttributeDetailServiceImpl implements AttributeDetailService {
     /**
      * @desc: 根据属性id查询属性明细
      */
-    public List<AttributeDetailDto> findAttributeDetailByAttrId(String attrId) {
+    public List<AttributeDetailDto> findAttributeDetailByAttrId(Long attrId) {
         return attributeDetailMapper.findAttributeDetailByAttrId(attrId);
     }
 
     /**
      * @desc: 删除属性明细
      */
-    public Object delAttributeDetails(String[] ids) {
+    public Object delAttributeDetails(Long[] ids) {
 
-        for (String id : ids) {
+        for (Long id : ids) {
             attributeDetailMapper.deleteByPrimaryKey(id);
         }
 

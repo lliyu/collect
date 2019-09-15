@@ -23,7 +23,7 @@ public interface RolePermissionMapper extends Mapper<RolePermission> {
      * @param roleId
      * @return
      */
-    Integer findCountByRole(@Param("roleId") String roleId,@Param("url") String url);
+    Integer findCountByRole(@Param("roleId") Long roleId,@Param("url") String url);
 
-    List<RolePermisDto> findRolesPermisByFatherId(@Param("fatherId") String fatherId, @Param("rid") String rid);
+    List<RolePermisDto> findRolesPermisByFatherId(@Param("fatherId") Long fatherId, @Param("rid") Long rid);
 }

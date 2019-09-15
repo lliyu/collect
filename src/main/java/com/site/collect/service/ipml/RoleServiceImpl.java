@@ -42,9 +42,9 @@ public class RoleServiceImpl implements RoleService {
     /**
      * @desc: 删除角色
      */
-    public Object delRole(String[] ids) {
+    public Object delRole(Long[] ids) {
 
-        for (String id : ids) {
+        for (Long id : ids) {
             roleMapper.deleteByPrimaryKey(id);
         }
         return new BaseResponse(StatusCode.OK.getValue(), "删除成功");

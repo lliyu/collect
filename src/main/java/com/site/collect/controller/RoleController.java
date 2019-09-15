@@ -70,7 +70,7 @@ public class RoleController {
             return new BaseResponse(StatusCode.BAD_REQUEST.getValue(), StatusCode.BAD_REQUEST.getMsg());
         }
         List<RolePermission> list = rolePermissionService.findRolesPermisByRole(dto);
-        String[] arr = new String[list.size()];
+        Long[] arr = new Long[list.size()];
         for (int i = 0,j=list.size(); i < j; i++) {
             arr[i] = list.get(i).getPid();
         }

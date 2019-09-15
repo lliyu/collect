@@ -1,5 +1,6 @@
 package com.site.collect.entity;
 
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -8,53 +9,39 @@ public class RolePermission implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-	private String id;
+    @Id
+	private Long id;
     /**
      * 角色ID
      */
-	private String rid;
+	private Long rid;
     /**
      * 权限ID
      */
-	private String pid;
+	private Long pid;
 
-
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getRid() {
+	public Long getRid() {
 		return rid;
 	}
 
-	public void setRid(String rid) {
+	public void setRid(Long rid) {
 		this.rid = rid;
 	}
 
-	public String getPid() {
+	public Long getPid() {
 		return pid;
 	}
 
-	public void setPid(String pid) {
+	public void setPid(Long pid) {
 		this.pid = pid;
 	}
 
-	public static final String ID = "id";
-
-	public static final String RID = "rid";
-
-	public static final String PID = "pid";
-
-	@Override
-	public String toString() {
-		return "RolePermission{" +
-			"id=" + id +
-			", rid=" + rid +
-			", pid=" + pid +
-			"}";
-	}
 }

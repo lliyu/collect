@@ -10,32 +10,28 @@ public class UserInfoVo {
     /**
      * id
      */
-    @NotBlank(message = "id不能为空")
-    private String id;
+    private Long id;
 
     /**
      * 姓名
      */
-    @NotBlank(message = "姓名不能为空")
     private String name;
 
     /**
      * 邮箱
      */
-    @NotBlank(message = "邮箱不能为空")
     private String email;
 
     /**
      * 头像
      */
-    @NotBlank(message = "头像不能为空")
     private String userImg;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
