@@ -15,7 +15,7 @@ public interface UserService {
 
     User get(Long id);
 
-    Object login(UserInfoDto infoDto);
+    UserInfoDto login(UserInfoDto infoDto);
 
     Object addUser(UserVo userVo);
 

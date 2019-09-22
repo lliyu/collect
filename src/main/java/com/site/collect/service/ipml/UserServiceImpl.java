@@ -1,7 +1,6 @@
 package com.site.collect.service.ipml;
 
 import cn.hutool.crypto.SecureUtil;
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.site.collect.Enum.StatusCode;
@@ -50,7 +49,7 @@ public class UserServiceImpl  implements UserService {
      * 登录
      * @return
      */
-    public Object login(UserInfoDto user) {
+    public UserInfoDto login(UserInfoDto user) {
         UserInfoDto userInfoDto = userMapper.getUser(user.getUsername());
         if(user == null || !(user.getPassword().equals((userInfoDto.getPassword()))))
             throw new BizException("用户名或密码错误！");
@@ -85,7 +84,7 @@ public class UserServiceImpl  implements UserService {
             parentList.get(i).setChildren((ArrayList<RolePermisDto>) trueChildrenList);
         }
         userInfoDto.setRolePermis((ArrayList) parentList);
-        return new BaseResponse(StatusCode.OK.getValue(), "登陆成功", JSON.toJSON(userInfoDto));
+        return userInfoDto;
     }
 
 
