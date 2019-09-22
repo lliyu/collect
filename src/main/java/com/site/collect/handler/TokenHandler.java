@@ -1,18 +1,21 @@
 package com.site.collect.handler;
 
-import org.apache.commons.lang.ObjectUtils;
+import com.site.collect.controller.api.UserApi;
+import com.site.collect.pojo.dto.UserInfoDto;
+import com.site.collect.utils.TokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class TokenHandler implements HandlerInterceptor {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate redisTemplate;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -22,12 +25,14 @@ public class TokenHandler implements HandlerInterceptor {
         //校验token
         String token = request.getHeader("Authorization");
         if(StringUtils.isNotBlank(token)){
-            Object user = redisTemplate.opsForValue().get(token);
-            if(user == null)
+            UserInfoDto info = TokenUtil.decrypt(token);
+            String user = (String) redisTemplate.opsForValue().get("token:" + info.getId());
+            if(!token.equals(user)) {
                 return false;
-//            redisTemplate.opsForValue().getOperations().hasKey()
+            }
+            UserApi.setUserlocal(info);
+            return true;
         }
-
         return false;
     }
 }

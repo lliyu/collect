@@ -45,8 +45,18 @@ public class WebConfig implements WebMvcConfigurer {
         converters.add(stringHttpMessageConverter);
     }
 
+    /**
+     * 拦截器的执行是在spring容器中bean初始化之前的，拦截器执行时，spring中我们定义的bean还未初始化，自然也就无法自动注入，无法使用。
+     * 所以这里将拦截器通过bean注入 保证在bean初始化完成后注入
+     * @return
+     */
+    @Bean
+    public TokenHandler tokenHandler(){
+        return new TokenHandler();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new TokenHandler()).addPathPatterns("/**");
+        registry.addInterceptor(tokenHandler()).addPathPatterns("/**");
     }
 }

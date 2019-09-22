@@ -25,7 +25,7 @@ import java.util.Date;
  */
 @Aspect
 @Component
-public class HttpAspect{
+public class HttpAspect {
 
     @Autowired
     private PermissionService permissionService;
