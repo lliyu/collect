@@ -11,6 +11,7 @@ import com.site.collect.service.UserService;
 import com.site.collect.utils.TokenUtil;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
@@ -38,6 +39,8 @@ public class LoginController {
     private UserService userService;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Value("${token.expire}")
+    private Long expire;
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public BaseResponse login(UserInfoDto infoDto, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -52,7 +55,7 @@ public class LoginController {
         String token = TokenUtil.encrypt(infoDto);
         //写入redis
         infoDto.setPassword(null);
-        redisTemplate.opsForValue().set("token:" + infoDto.getId(), token, 60*60, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set("token:" + infoDto.getId(), token, expire, TimeUnit.SECONDS);
 
         //需要设置这一行才能在前端获取到header
         //如果要添加新的header 也需要这样

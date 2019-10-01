@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class TokenUtil {
 
-    @Value("${aes.key}")
+    @Value("${token.aes.key}")
     private static String encodeRules = "ca017d0ff169b425";
 
     // 加密
