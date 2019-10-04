@@ -14,10 +14,20 @@ public class PermisDto {
      */
     private String name;
 
+    private String code;
+
     /**
      * 子菜单
      */
     private ArrayList<PermisDto> children;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public Long getId() {
         return id;

@@ -33,6 +33,10 @@ public class Permission implements Serializable {
      */
 	@Column(name = "fid")
 	private Long fatherId;
+
+	private String code;
+
+	private String levels;
     /**
      * 排序
      */
@@ -116,6 +120,22 @@ public class Permission implements Serializable {
 
 	public void setRequestType(String requestType) {
 		this.requestType = requestType;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getLevels() {
+		return levels;
+	}
+
+	public void setLevels(String levels) {
+		this.levels = levels;
 	}
 
 	public Integer getSort() {

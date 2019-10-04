@@ -27,9 +27,12 @@
 		INNER JOIN sys_attribute_detail attr ON permis.type = attr.id
 		WHERE
 		(1 = 1)
-		<if test="''!=dto.keyword">
+		<if test="null != dto.keyword">
             AND permis.`name` LIKE CONCAT('%',#{dto.keyword},'%')
         </if>
+		<if test="null != dto.code">
+			AND permis.`levels` LIKE CONCAT('%',#{dto.code},'%')
+		</if>
 	</select>
 
 
@@ -62,6 +65,7 @@
 		SELECT
 		permis.id,
 		permis.`name`,
+		permis.code,
 		permis.fid AS lastId
 		FROM
 		sys_permission permis
@@ -72,7 +76,8 @@
     <select id="findPermissionByFatherId" resultType="com.site.collect.pojo.dto.PermisDto">
         SELECT
         permis.id,
-        permis.`name`
+        permis.`name`,
+        permis.code
         FROM
         sys_permission permis
         WHERE permis.fid = #{fatherId}

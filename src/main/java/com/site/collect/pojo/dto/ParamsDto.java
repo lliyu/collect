@@ -18,6 +18,8 @@ public class ParamsDto implements Serializable{
      */
     private Long[] ids;
 
+    private String code;
+
     /**
      * 类型
      */
@@ -42,6 +44,14 @@ public class ParamsDto implements Serializable{
      * 每页大小
      */
     private Integer pageSize;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public Long getId() {
         return id;

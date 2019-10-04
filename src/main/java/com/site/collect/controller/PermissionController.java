@@ -41,7 +41,7 @@ public class PermissionController {
      */
     @ResponseBody
     @RequestMapping(value = "/add" ,method = RequestMethod.POST)
-    public Object addPermissions(@Valid PermissionVo vo, BindingResult bindingResult) {
+    public Object addPermissions(@Valid PermissionVo vo) {
 //      vo.setUserName(super.getUserName());
 //      vo.setUserId(super.getUserId());
       return permissionService.addPermissions(vo);

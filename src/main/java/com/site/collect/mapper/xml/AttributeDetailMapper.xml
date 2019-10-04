@@ -26,7 +26,7 @@
 		FROM
 		sys_attribute_detail AS attr_detail
 		WHERE
-		attr_detail.attrId = #{attrId}
+		attr_detail.attr_id = #{attrId}
 	</select>
 
 </mapper>

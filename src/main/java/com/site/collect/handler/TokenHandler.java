@@ -1,6 +1,8 @@
 package com.site.collect.handler;
 
+import com.site.collect.Enum.RequestStatus;
 import com.site.collect.controller.api.UserApi;
+import com.site.collect.exception.BizException;
 import com.site.collect.pojo.dto.UserInfoDto;
 import com.site.collect.utils.TokenUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +37,7 @@ public class TokenHandler implements HandlerInterceptor {
             String user = redisTemplate.opsForValue().get(key);
 
             if(!token.equals(user)) {
-                return false;
+                throw new BizException(RequestStatus.LOGININVAILD.getCode(), RequestStatus.LOGININVAILD.getDesc());
             }
             //确定token有效后 判断当前token使用时间是否已经超过有效期的2/3
             //如果已经超过则对token进行刷新

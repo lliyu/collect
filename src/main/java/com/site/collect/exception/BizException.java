@@ -8,7 +8,22 @@ public class BizException extends RuntimeException{
     /**
      * 返回结果
      */
+
+    private int code;
     private Object result;
+
+    public BizException(int code, Object result) {
+        this.code = code;
+        this.result = result;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
 
     public BizException(Object result) {
         this.result = result;
