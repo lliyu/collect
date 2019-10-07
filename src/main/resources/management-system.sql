@@ -232,7 +232,7 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
-  `id` varchar(32) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `head_portraits` varchar(255) DEFAULT NULL COMMENT '头像',
   `nickname` varchar(20) DEFAULT NULL COMMENT '用户昵称',
   `email` varchar(128) DEFAULT NULL COMMENT '邮箱|登录帐号',

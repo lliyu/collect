@@ -11,6 +11,7 @@ import com.site.collect.service.RolePermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,9 +41,9 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         Long roleId = vo.getRoleId();
         Long[] permisIds = vo.getPermiIds()==null?new Long[0]:vo.getPermiIds();
 
-        Map<String,Object> map = new HashMap<>();
-        map.put("rid",roleId);
-        rolePermissionMapper.deleteByExample(map);
+        Example example = new Example(RolePermission.class);
+        example.createCriteria().andEqualTo("rid", roleId);
+        rolePermissionMapper.deleteByExample(example);
 
         for (int i = 0,j=permisIds.length; i < j; i++) {
             rp = new RolePermission();

@@ -78,8 +78,8 @@ public class UserServiceImpl  implements UserService {
                 sonssonList = rolePermissionService.findRolesPermisByFatherId(sonList.get(k).getId(), rid);
                 // 如果按钮级拥有权限说明页面也有权限
                 if (!sonssonList.isEmpty() && sonssonList.size() > 0) {
-                    trueChildrenList.add(sonList.get(k));
                 }
+                trueChildrenList.add(sonList.get(k));
             }
             parentList.get(i).setChildren((ArrayList<RolePermisDto>) trueChildrenList);
         }

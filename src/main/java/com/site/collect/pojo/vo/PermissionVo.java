@@ -15,6 +15,8 @@ public class PermissionVo {
      */
     private String url;
 
+    private String code;
+
     /**
      * 菜单类型
      */
@@ -23,7 +25,7 @@ public class PermissionVo {
     /**
      * 父级菜单id
      */
-    private Long fId;
+    private Long fid;
 
     /**
      * 用户名称
@@ -66,12 +68,12 @@ public class PermissionVo {
         this.userName = userName;
     }
 
-    public Long getfId() {
-        return fId;
+    public Long getFid() {
+        return fid;
     }
 
-    public void setfId(Long fId) {
-        this.fId = fId;
+    public void setFid(Long fid) {
+        this.fid = fid;
     }
 
     public Long getUserId() {
@@ -80,5 +82,13 @@ public class PermissionVo {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

@@ -16,7 +16,7 @@
 		FROM
 		sys_attribute_detail AS attr_detail
 		WHERE
-		attr_detail.attrId = #{dto.id}
+		attr_detail.attr_id = #{dto.id}
 	</select>
 
 	<select id="findAttributeDetailByAttrId" resultType="com.site.collect.pojo.dto.AttributeDetailDto">

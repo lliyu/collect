@@ -1,34 +1,20 @@
 package com.site.collect.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Maps;
 import com.site.collect.Enum.StatusCode;
+import com.site.collect.controller.api.UserApi;
 import com.site.collect.exception.BizException;
 import com.site.collect.pojo.dto.UserInfoDto;
 import com.site.collect.response.BaseResponse;
-import com.site.collect.service.LoginLogService;
 import com.site.collect.service.UserService;
 import com.site.collect.utils.TokenUtil;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -43,11 +29,11 @@ public class LoginController {
     private Long expire;
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public BaseResponse login(UserInfoDto infoDto, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public BaseResponse login(UserInfoDto infoDto, HttpServletResponse response) throws Exception {
         //判断是否已经登录
         Boolean aBoolean = redisTemplate.opsForValue().getOperations().hasKey("token:" + infoDto.getId());
         if(aBoolean)
-            throw new BizException("请不要重复登录！ß");
+            throw new BizException("请不要重复登录！");
 
         infoDto = userService.login(infoDto);
         //登录成功 写入token
@@ -66,10 +52,7 @@ public class LoginController {
 
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
     public Object logout() {
-        try {
-            return new BaseResponse(StatusCode.OK.getValue(), "退出登陆成功");
-        } catch (Exception e) {
-            return "/login";
-        }
+        Boolean delete = redisTemplate.delete("token:" + UserApi.getUserId());
+        return new BaseResponse(StatusCode.OK.getValue(), "退出登陆成功");
     }
 }

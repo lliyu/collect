@@ -3,6 +3,7 @@ package com.site.collect.service.ipml;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.site.collect.Enum.StatusCode;
+import com.site.collect.controller.api.UserApi;
 import com.site.collect.entity.Permission;
 import com.site.collect.mapper.PermissionMapper;
 import com.site.collect.pojo.dto.ParamsDto;
@@ -12,6 +13,7 @@ import com.site.collect.response.BaseResponse;
 import com.site.collect.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,12 +43,22 @@ public class PermissionServiceImpl implements PermissionService {
     public Object addPermissions(PermissionVo vo) {
 
         Permission p = new Permission();
+        if(vo.getFid() != null){
+            //查询父节点
+            Example example = new Example(Permission.class);
+            example.createCriteria().andEqualTo("id", vo.getFid());
+            Permission permission = permissionMapper.selectOneByExample(example);
+            p.setLevels(permission.getLevels() + ":" + vo.getCode());
+        }
+
         p.setName(vo.getName());
         p.setUrl(vo.getUrl());
         p.setType(vo.getType());
-        p.setFatherId(vo.getfId());
+        p.setFatherId(vo.getFid());
         p.setCreateTime(new Date());
-        p.setCreater(vo.getUserName());
+        p.setUpdateTime(new Date());
+        p.setCode(vo.getCode());
+        p.setCreater(UserApi.getUserName());
         permissionMapper.insert(p);
         return new BaseResponse(StatusCode.OK.getValue(), "新增成功");
 
