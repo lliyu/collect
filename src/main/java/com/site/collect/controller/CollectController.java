@@ -52,7 +52,7 @@ public class CollectController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public BaseResponse add(CollectDto collectDto){
         Long id = collectService.add(collectDto);
-        return new BaseResponse(200, "删除成功", id);
+        return new BaseResponse(200, "", id);
     }
 
     @ResponseBody
