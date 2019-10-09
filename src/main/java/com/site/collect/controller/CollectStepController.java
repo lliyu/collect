@@ -1,6 +1,7 @@
 package com.site.collect.controller;
 
-import com.site.collect.entity.collect.CollectSetp;
+import com.alibaba.fastjson.JSONArray;
+import com.site.collect.entity.collect.CollectStep;
 import com.site.collect.response.BaseResponse;
 import com.site.collect.service.CollectStepService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ public class CollectStepController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse addSteps(@RequestParam(value = "steps[]") CollectSetp[] setps){
-        stepService.addSteps(setps);
+    public BaseResponse addSteps(@RequestParam(value = "steps", required = false) String setps){
+        stepService.addSteps(JSONArray.parseArray(setps, CollectStep.class));
         return new BaseResponse(200, "");
     }
 

@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.github.pagehelper.PageInfo;
 import com.site.collect.entity.collect.CollectEntity;
-import com.site.collect.entity.collect.CollectSetp;
+import com.site.collect.entity.collect.CollectStep;
 import com.site.collect.pojo.dto.CollectDto;
 import com.site.collect.response.BaseResponse;
 import com.site.collect.service.CollectService;
@@ -57,7 +57,7 @@ public class CollectController {
 
     @ResponseBody
     @RequestMapping(value = "/test", method = RequestMethod.POST)
-    public BaseResponse test(CollectSetp setp){
+    public BaseResponse test(CollectStep setp){
         Map<String, List<Object>> test = collectStepService.test(setp);
         return new BaseResponse(200, "", JSON.toJSONString(test, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteDateUseDateFormat));

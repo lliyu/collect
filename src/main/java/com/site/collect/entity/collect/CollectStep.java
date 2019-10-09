@@ -1,15 +1,13 @@
 package com.site.collect.entity.collect;
 
-import org.apache.commons.lang3.StringUtils;
-
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
-@Table(name = "collect_setp")
-public class CollectSetp implements Serializable {
+@Table(name = "collect_step")
+public class CollectStep implements Serializable {
 
     @Id
     private Long id;

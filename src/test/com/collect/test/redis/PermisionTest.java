@@ -2,7 +2,9 @@ package com.collect.test.redis;
 
 import com.site.collect.SiteApplication;
 import com.site.collect.entity.Permission;
+import com.site.collect.entity.collect.CollectStep;
 import com.site.collect.mapper.PermissionMapper;
+import com.site.collect.service.CollectStepService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -18,6 +22,9 @@ public class PermisionTest {
 
     @Autowired
     private PermissionMapper permissionMapper;
+
+    @Autowired
+    private CollectStepService stepService;
 
 
     public List<Permission> getPermi(Long fid){
@@ -44,5 +51,18 @@ public class PermisionTest {
         permi.stream().forEach(permission -> {
             update(permission);
         });
+    }
+
+    @Test
+    public void add(){
+        CollectStep step = new CollectStep();
+        step.setCollectId(1l);
+        step.setName("baidu");
+        step.setIndex(1);
+        step.setAddr("http://wwwbaidu.com/s?ie=UTF-8&wd=baidu");
+        step.setValue("[{\"value\":\"//h3[@class='t']/a/allText()\",\"name\":\"item\"}]");
+        step.setCreateTime(new Date());
+        step.setUpdateTime(new Date());
+        stepService.addSteps(Arrays.asList(step));
     }
 }
