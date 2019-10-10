@@ -14,14 +14,14 @@ public class CollectStep implements Serializable {
 
     @Column(name = "cid")
     private Long collectId;
-    @Column(name = "name")
+    @Column(name = "cname")
     private String name;
-    @Column(name = "index")
+    @Column(name = "step_index")
     private Integer index;
 
     @Column(name = "addr")
     private String addr;
-    @Column(name = "value")
+    @Column(name = "step_value")
     private String value;
 
     @Column(name = "create_time")
