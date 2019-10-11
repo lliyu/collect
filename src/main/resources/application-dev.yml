@@ -50,10 +50,14 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+
 token:
   aes:
     key: e10adc3949ba59abbe56e057f20f883e
   expire:  7200 #3600*2 过期时间为两小时
   refresh: 3600
+
+mapper:
+  identity: mysql
 
 

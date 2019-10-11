@@ -1,8 +1,6 @@
 package com.site.collect.entity.collect;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -10,6 +8,7 @@ import java.util.Date;
 public class CollectEntity implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 主键回写
     private Long id;
 
     @Column(name = "name")
