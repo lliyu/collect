@@ -29,6 +29,8 @@ public class TokenHandler implements HandlerInterceptor {
         //
         if(request.getRequestURI().contains("login"))
             return true;
+        if(request.getRequestURI().contains("test"))
+            return true;
         //校验token
         String token = request.getHeader("Authorization");
         if(StringUtils.isNotBlank(token)){

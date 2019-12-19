@@ -60,4 +60,7 @@ token:
 mapper:
   identity: mysql
 
+refresh:
+  value: test1111
+
 
