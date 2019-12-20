@@ -4,7 +4,6 @@ import com.github.pagehelper.PageInfo;
 import com.site.collect.Enum.StatusCode;
 import com.site.collect.Enum.RoleType;
 import com.site.collect.entity.User;
-import com.site.collect.ftp.UploadUtil;
 import com.site.collect.pojo.dto.ParamsDto;
 import com.site.collect.pojo.dto.UserDto;
 import com.site.collect.pojo.vo.UserInfoVo;
@@ -39,7 +38,7 @@ public class UserController {
     @RequestMapping(value = "/uploadHander", method = RequestMethod.POST)
     public String uploadLogo(HttpServletRequest request) {
         uploadImg = new HashMap<String, String>();
-        uploadImg = UploadUtil.uploadImage(request, "vue_shiro_photo/userImg");
+//        uploadImg = UploadUtil.uploadImage(request, "vue_shiro_photo/userImg");
         return uploadImg.get("userImg");
     }
 
