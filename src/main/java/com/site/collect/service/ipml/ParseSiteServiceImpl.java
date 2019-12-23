@@ -13,6 +13,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.seimicrawler.xpath.JXDocument;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
+@Service
 public class ParseSiteServiceImpl implements ParseSiteService {
 
     private static ExecutorService collectExecutorService = Executors.newFixedThreadPool(10);
@@ -39,23 +40,21 @@ public class ParseSiteServiceImpl implements ParseSiteService {
             //根据id查询任务
             CollectDto collectInfo = collectService.getCollectInfoById(id);
             //将任务添加到线程池中
-            Runnable collectTask = () -> {
                 //任务过程中流程比较长 并且不同流程可以同步进行(只要mq中存在消息)
                 //这里是所有任务共用一个线程池 还是不同任务有不同的线程池? 目前分为两种线程池
 
                 //第一步和后面过程不太一样
                 //第一步数据完全有用户界面的数据提供
                 //后面过程可能需要从mq中读取前面过程解析出的数据
-                for (int i = 0; i < collectInfo.getStep(); i++) {
+                for (int i = 1; i <= collectInfo.getStep(); i++) {
                     CollectStep collectStep = getCollectStep(i);
                     if (collectStep != null) {
                         parseStep(collectStep);
-
                     }
                 }
-            };
-
-            collectExecutorService.execute(collectTask);
+//            Runnable collectTask = () -> {
+//            };
+//            collectExecutorService.execute(collectTask);
         });
     }
 
@@ -70,22 +69,22 @@ public class ParseSiteServiceImpl implements ParseSiteService {
         //对每一个item进行解析
         HashMap<String, Object> itemValueMaps = Maps.newHashMap();
         if (items != null) {
-            Runnable parse = () -> {
                 items.stream().forEach(item -> {
                     //到这一步的时候url一定是完整的 可以获取到内容的url
                     try {
                         //开始解析，获取一个document对象 解析后的内容放入map中
                         Document document = Jsoup.connect(collectStep.getAddr()).headers(objectObjectHashMap).get();
                         JXDocument jxDocument = JXDocument.create(document);
-                        List<Object> res = jxDocument.sel(collectStep.getValue());
-                        itemValueMaps.put(collectStep.getName(), res);
+                        List<Object> res = jxDocument.sel(item.getValue());
+                        itemValueMaps.put(item.getName(), res);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     System.out.println(itemValueMaps);
                 });
-            };
-            parseExecutorService.execute(parse);
+//            Runnable parse = () -> {
+//            };
+//            parseExecutorService.execute(parse);
         }
     }
 
