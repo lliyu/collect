@@ -20,7 +20,7 @@ public class ParseUtils {
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
 
-    public static void testOnlineSite(String url, String keyword) throws IOException {
+    public static String testOnlineSite(String url, String keyword) throws IOException {
         String source = System.getProperty("user.dir") + "/src/test/java/resource";
         File dir = new File(source);
         if(!dir.exists())
@@ -35,6 +35,7 @@ public class ParseUtils {
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(resp.getBytes());
         fos.close();
+        return resp;
     }
 
     public static String readHtml(String keyword) throws IOException {
@@ -71,6 +72,7 @@ public class ParseUtils {
         return sel;
     }
 
+
 //    public static OnlineSite parseInfo(String html){
 //        String imgRe = "\"media_id\".*?\"cover\":\"(.*?)\"";
 //        String urlRe = "\"media_id\":(.*?),";
@@ -98,8 +100,9 @@ public class ParseUtils {
 //    }
 
     public static void main(String[] args) throws IOException {
-//        testOnlineSite("http://www.baidu.com/s?ie=UTF-8&wd=baidu", "baidu");
+        testOnlineSite("https://www.baidu.com/s?ie=UTF-8&wd=baidu", "baidu");
         String baidu = readHtml("baidu");
-//        parse(baidu);
+        String s = parseSite(baidu);
+        System.out.println(s);
     }
 }
