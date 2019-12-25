@@ -24,6 +24,9 @@ public class CollectStep implements Serializable {
     @Column(name = "step_value")
     private String value;
 
+    @Column(name = "mapping")
+    private String mapping;
+
     @Column(name = "create_time")
     private Date createTime;
 
@@ -76,6 +79,14 @@ public class CollectStep implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getMapping() {
+        return mapping;
+    }
+
+    public void setMapping(String mapping) {
+        this.mapping = mapping;
     }
 
     public Date getCreateTime() {

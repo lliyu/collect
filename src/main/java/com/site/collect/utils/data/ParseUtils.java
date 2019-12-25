@@ -1,8 +1,13 @@
 package com.site.collect.utils.data;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.site.collect.entity.collect.CollectStep;
 import com.site.collect.entity.collect.Item;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -11,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +32,7 @@ public class ParseUtils {
         File dir = new File(source);
         if(!dir.exists())
             dir.mkdirs();
-        File file = new File(source + MessageFormat.format("/html" + "-{0}.txt", keyword));
+        File file = new File(source + MessageFormat.format("/html" + "-{0}.html", keyword));
         if(!file.exists())
             file.createNewFile();
         //将读取到的结果写入到文件中
@@ -39,7 +46,7 @@ public class ParseUtils {
     }
 
     public static String readHtml(String keyword) throws IOException {
-        String source = System.getProperty("user.dir") + MessageFormat.format("/src/test/java/resource/html-{0}.txt", keyword);
+        String source = System.getProperty("user.dir") + MessageFormat.format("/src/test/java/resource/html-{0}.html", keyword);
         File file = new File(source);
         if(!file.exists())
             return "";
@@ -65,11 +72,39 @@ public class ParseUtils {
         return "";
     }
 
+    public static List<HashMap<String, Object>> regexParseSite(String html, CollectStep collectStep){
+        List<Item> items = obtainItems(collectStep);
+        //正则解析
+        String regex = collectStep.getValue();
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(html);
+        List<HashMap<String, Object>> objects = Lists.newArrayList();
+        while (matcher.find()){
+            HashMap<String, Object> objectObjectHashMap = Maps.newHashMap();
+            for (int i = 0; i < matcher.groupCount(); i++) {
+                objectObjectHashMap.put(items.get(i).getName(), matcher.group(i+1));
+            }
+            objects.add(objectObjectHashMap);
+        }
+        return objects;
+    }
+
     public static List<Object> parse(String url, Item item) throws IOException {
         JXDocument document = JXDocument.createByUrl(url);
         List<Object> sel = document.sel(item.getValue());
 
         return sel;
+    }
+
+    public static List<Item> obtainItems(CollectStep collectStep) {
+        //解析具体的步骤
+        String value = collectStep.getMapping();
+        List<Item> items = null;
+        if (StringUtils.isNotBlank(value)) {
+            //从value中获取item集合
+            items = JSONObject.parseArray(value, Item.class);
+        }
+        return items;
     }
 
 

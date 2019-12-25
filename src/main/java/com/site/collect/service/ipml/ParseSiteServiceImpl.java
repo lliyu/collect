@@ -1,17 +1,19 @@
 package com.site.collect.service.ipml;
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
+import com.site.collect.constant.RabbitConstant;
 import com.site.collect.entity.collect.CollectStep;
 import com.site.collect.entity.collect.Item;
 import com.site.collect.mapper.CollectStepMapper;
 import com.site.collect.pojo.dto.CollectDto;
 import com.site.collect.service.CollectService;
 import com.site.collect.service.ParseSiteService;
+import com.site.collect.utils.data.ParseUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.seimicrawler.xpath.JXDocument;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -19,6 +21,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -33,6 +36,9 @@ public class ParseSiteServiceImpl implements ParseSiteService {
 
     @Autowired
     private CollectStepMapper collectStepMapper;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public void parse(List<Long> ids) {
@@ -58,34 +64,64 @@ public class ParseSiteServiceImpl implements ParseSiteService {
         });
     }
 
-    private void parseStep(CollectStep collectStep) {
-        List<Item> items = obtainItems(collectStep);
 
+    private void parseStep(CollectStep collectStep) {
+
+        //对每一个item进行解析
+        try {
+            regexParse(collectStep);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ;
+//        if (items != null) {
+//                items.stream().forEach(item -> {
+//                    //到这一步的时候url一定是完整的 可以获取到内容的url
+//                    try {
+//                        regexParse(collectStep, itemValueMaps, item);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    System.out.println(itemValueMaps);
+//                });
+//            Runnable parse = () -> {
+//            };
+//            parseExecutorService.execute(parse);
+//        }
+    }
+
+    private void regexParse(CollectStep collectStep) throws IOException {
+
+        String html = ParseUtils.readHtml(collectStep.getName());
+        if (StringUtils.isBlank(html)) {
+            //读取为html文件
+            html = ParseUtils.testOnlineSite(collectStep.getAddr(), collectStep.getName());
+        }
+
+        List<HashMap<String, Object>> hashMaps = ParseUtils.regexParseSite(html, collectStep);
+        //将map中的数据推向mq
+        hashMaps.stream().forEach(hashMap -> {
+            hashMap.put("step", collectStep.getId());
+//            System.out.println("推送消息到mq:" + hashMap);
+            //rabbitTemplate在lambda函数中无法将数据推送到mq中 一道外面可以 ？？？
+            rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, hashMap);
+
+        });
+
+    }
+
+    private void xpathParse(CollectStep collectStep, HashMap<String, Object> itemValueMaps, Item item) throws IOException {
         HashMap<String, String> objectObjectHashMap = Maps.newHashMap();
         objectObjectHashMap.put("accept", "*/*");
         objectObjectHashMap.put("connection", "Keep-Alive");
         objectObjectHashMap.put("user-agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36");
 
-        //对每一个item进行解析
-        HashMap<String, Object> itemValueMaps = Maps.newHashMap();
-        if (items != null) {
-                items.stream().forEach(item -> {
-                    //到这一步的时候url一定是完整的 可以获取到内容的url
-                    try {
-                        //开始解析，获取一个document对象 解析后的内容放入map中
-                        Document document = Jsoup.connect(collectStep.getAddr()).headers(objectObjectHashMap).get();
-                        JXDocument jxDocument = JXDocument.create(document);
-                        List<Object> res = jxDocument.sel(item.getValue());
-                        itemValueMaps.put(item.getName(), res);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println(itemValueMaps);
-                });
-//            Runnable parse = () -> {
-//            };
-//            parseExecutorService.execute(parse);
-        }
+        //开始解析，获取一个document对象 解析后的内容放入map中
+        Document document = Jsoup.connect(collectStep.getAddr()).headers(objectObjectHashMap).get();
+
+        JXDocument jxDocument = JXDocument.create(document);
+        List<Object> res = jxDocument.sel(item.getValue());
+        itemValueMaps.put(item.getName(), res);
     }
 
     private CollectStep getCollectStep(int i) {
@@ -95,14 +131,5 @@ public class ParseSiteServiceImpl implements ParseSiteService {
         return collectStepMapper.selectOneByExample(example);
     }
 
-    private List<Item> obtainItems(CollectStep collectStep) {
-        //解析具体的步骤
-        String value = collectStep.getValue();
-        List<Item> items = null;
-        if (StringUtils.isNotBlank(value)) {
-            //从value中获取item集合
-            items = JSONObject.parseArray(value, Item.class);
-        }
-        return items;
-    }
+
 }
