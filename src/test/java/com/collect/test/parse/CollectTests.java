@@ -32,23 +32,27 @@ public class CollectTests {
         //添加步骤
         CollectStep step = new CollectStep();
         step.setCollectId(collect.getId());
-        step.setAddr("https://tieba.baidu.com/f?kw=%D0%A6%BB%B0&fr=ala0&tpl=5");
+        step.setAddr("https://tieba.baidu.com${url}");
         step.setName("笑话吧item采集");
         step.setIndex(2);
-        step.setValue("<div class=\"threadlist_title pull_left j_th_tit \">[\\s]*<a.*?href=\"(.*?)\">(.*?)</a>[\\S\\s]*?</div>");
+        //<div.*?d_post_content j_d_post_content[\s\S]*?>.*?[\r\n]*?</div>
+        step.setValue("<div.*?d_post_content j_d_post_content[\\s\\S]*?>(.*?)[\\s\\S]*?</div>");
 
         Item item = new Item();
-        item.setName("名称");
-        Item item1 = new Item();
-        item1.setName("连接");
+        item.setName("content");
         ArrayList<Item> list = Lists.newArrayList();
         list.add(item);
-        list.add(item1);
 
         step.setMapping(JSONObject.toJSONString(list));
 
         ArrayList<CollectStep> objects = Lists.newArrayList();
         objects.add(step);
         collectStepService.addSteps(objects);
+    }
+
+    @Test
+    public void get() throws InterruptedException {
+        Thread.sleep(4000);
+        CollectDto collect = collectService.getCollectInfoById(1l);
     }
 }

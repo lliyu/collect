@@ -21,7 +21,6 @@ import tk.mybatis.mapper.entity.Example;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -52,11 +51,11 @@ public class ParseSiteServiceImpl implements ParseSiteService {
                 //第一步和后面过程不太一样
                 //第一步数据完全有用户界面的数据提供
                 //后面过程可能需要从mq中读取前面过程解析出的数据
-                for (int i = 1; i <= collectInfo.getStep(); i++) {
-                    CollectStep collectStep = getCollectStep(i);
-                    if (collectStep != null) {
-                        parseStep(collectStep);
-                    }
+            CollectStep collectStep = getCollectStep(1);
+            if (collectStep != null) {
+                parseStep(collectStep);
+            }
+            for (int i = 1; i <= collectInfo.getStep(); i++) {
                 }
 //            Runnable collectTask = () -> {
 //            };
@@ -65,7 +64,8 @@ public class ParseSiteServiceImpl implements ParseSiteService {
     }
 
 
-    private void parseStep(CollectStep collectStep) {
+    @Override
+    public void parseStep(CollectStep collectStep) {
 
         //对每一个item进行解析
         try {
@@ -101,7 +101,7 @@ public class ParseSiteServiceImpl implements ParseSiteService {
         List<HashMap<String, Object>> hashMaps = ParseUtils.regexParseSite(html, collectStep);
         //将map中的数据推向mq
         hashMaps.stream().forEach(hashMap -> {
-            hashMap.put("step", collectStep.getId());
+            hashMap.put("step", collectStep);
 //            System.out.println("推送消息到mq:" + hashMap);
             //rabbitTemplate在lambda函数中无法将数据推送到mq中 一道外面可以 ？？？
             rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, hashMap);

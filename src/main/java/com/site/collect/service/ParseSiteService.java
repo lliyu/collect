@@ -1,9 +1,8 @@
 package com.site.collect.service;
 
-import org.springframework.context.annotation.Configuration;
+import com.site.collect.entity.collect.CollectStep;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 页面解析service
@@ -11,5 +10,6 @@ import java.util.Map;
 public interface ParseSiteService {
 
     void parse(List<Long> ids);
+    public void parseStep(CollectStep collectStep);
 
 }

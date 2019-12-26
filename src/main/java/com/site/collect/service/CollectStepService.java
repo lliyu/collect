@@ -10,4 +10,6 @@ public interface CollectStepService {
     void addSteps(List<CollectStep> stepss);
 
     Map<String, List<Object>> test(CollectStep setp);
+
+    CollectStep getStepByCidAndIndex(CollectStep step);
 }

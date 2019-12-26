@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.io.IOException;
 import java.util.Date;
@@ -51,5 +52,13 @@ public class CollectStepServiceImpl implements CollectStepService {
         });
 
         return maps;
+    }
+
+    @Override
+    public CollectStep getStepByCidAndIndex(CollectStep step) {
+        Example example = new Example(CollectStep.class);
+        example.createCriteria().andEqualTo("collectId", step.getCollectId()).andEqualTo("index", step.getIndex()+1);
+        CollectStep collectStep = collectStepMapper.selectOneByExample(example);
+        return collectStep;
     }
 }
