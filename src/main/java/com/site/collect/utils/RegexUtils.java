@@ -1,6 +1,5 @@
 package com.site.collect.utils;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,26 +36,34 @@ public class RegexUtils {
         return content;
     }
 
-    public static void main(String[] args) {
-        Map<String, Object> map = new HashMap(2);
-        map.put("name", "Jame Gosling");
-        map.put("alias", "Rod Johnson");
+    public static String replaceLineSp(String content){
+        return content.replaceAll("<br>", "\r\n");
+    }
 
-        String line = "${name} did a great job, so ${alias} did. ${name}";
-        System.out.println(matchExpression(line, map));
+    public static String replaceImgs(String content){
+        String regex = "<img.*?src=\"(.*?)\".*?>";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(content);
+
+        while (matcher.find()){
+            //![image](https://note.youdao.com/favicon.ico)
+            content = content.replace(matcher.group(), "![image](" + matcher.group(1) + ")\r\n");
+        }
+
+        return content;
+    }
+
+    public static void main(String[] args) {
+//        Map<String, Object> map = new HashMap(2);
+//        map.put("name", "Jame Gosling");
+//        map.put("alias", "Rod Johnson");
 //
-//        String regex = "\\$\\{[^\\}]+\\}";
+//        String line = "${name} did a great job, so ${alias} did. ${name}";
+//        System.out.println(matchExpression(line, map));
 //
-//        Pattern p = Pattern.compile(regex);
-//        Matcher m = p.matcher(line);
-//
-//        String g;
-//        while (m.find()) {
-//            g = m.group();
-//            g = g.substring(2, g.length() - 1);
-//            line = m.replaceFirst(map.get(g) + "");
-//            m = p.matcher(line);
-//        }
-//        System.out.println(line);
+        String content = "12.21更新<br><img class=\"BDE_Image\" src=\"http://tiebapic.baidu.com/forum/w%3D580/sign=0145ad2823a85edffa8cfe2b795509d8/368da9773912b31b0d2509519118367adab4e17a.jpg\" size=\"112257\" width=\"450\" height=\"800\" size=\"112257\">";
+        content = replaceLineSp(content);
+        content = replaceImgs(content);
+        System.out.println(content);
     }
 }

@@ -27,7 +27,6 @@ public class StepConsumerListener {
 
     @RabbitListener(queues = RabbitConstant.STEP_DATA_QUEUE)
     public void process(Map<String, Object> map) throws IOException {
-//        System.out.println("消费消息:" + map);
         //开始消费消息
         //数据库中存的可能是含有解析式的内容 需要先将解析式中的表达式换成具体的内容
         //通过map中的stepid取到当前内容是哪一个步骤中的
@@ -49,11 +48,24 @@ public class StepConsumerListener {
             if (StringUtils.isBlank(html)) {
                 //读取为html文件
             }
+
+            //将结果写入文件  目前直接指定 后续可以做成配置项的形式
+
             html = ParseUtils.testOnlineSite(parseStep.getAddr(), parseStep.getName());
-            System.out.println(map.get("url"));
+//            System.out.println(map.get("url"));
+            String filename = parseStep.getName() + ".md";
             List<HashMap<String, Object>> hashMaps = ParseUtils.regexParseSite(html, parseStep);
             hashMaps.stream().forEach(hashMap -> {
-                System.out.println(hashMap);
+//                System.out.println(hashMap);
+                try {
+                    String content = String.valueOf(hashMap.get("content"));
+                    content = RegexUtils.replaceLineSp(content);
+                    content = RegexUtils.replaceImgs(content);
+//                    content += "\r\n---\r\n";
+                    ParseUtils.write2File(filename, content);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
         }
 

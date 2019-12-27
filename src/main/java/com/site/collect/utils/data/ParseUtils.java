@@ -15,6 +15,9 @@ import org.seimicrawler.xpath.JXDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +46,30 @@ public class ParseUtils {
         fos.write(resp.getBytes());
         fos.close();
         return resp;
+    }
+
+    public static void write2File(String filename, String content) throws IOException {
+        String source = System.getProperty("user.dir") + "/src/test/java/resource/content";
+        File dir = new File(source);
+        if(!dir.exists())
+            dir.mkdirs();
+        File file = new File(source + "/" + filename);
+        if(!file.exists())
+            file.createNewFile();
+        //将读取到的结果写入到文件中
+
+        try(FileOutputStream fos = new FileOutputStream(file, true)){
+            FileChannel channel = fos.getChannel();
+            ByteBuffer buffer = Charset.forName("utf8").encode(content);
+//            int len = 0;
+//
+//            while ((len=channel.write(buffer))!=0){
+//
+//            }
+            channel.write(buffer);
+
+        }
+
     }
 
     public static String readHtml(String keyword) throws IOException {
