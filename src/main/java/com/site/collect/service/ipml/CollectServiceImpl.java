@@ -52,7 +52,7 @@ public class CollectServiceImpl implements CollectService {
 
         collectEntity.setCreateTime(new Date());
         collectEntity.setUpdateTime(new Date());
-        collectEntity.setUid(UserApi.getUserId());
+//        collectEntity.setUid(UserApi.getUserId());
         collectMapper.insert(collectEntity);
         return collectEntity.getId();
     }

@@ -8,6 +8,10 @@ import com.google.common.collect.Maps;
 import com.site.collect.entity.collect.CollectStep;
 import com.site.collect.entity.collect.Item;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -61,13 +65,7 @@ public class ParseUtils {
         try(FileOutputStream fos = new FileOutputStream(file, true)){
             FileChannel channel = fos.getChannel();
             ByteBuffer buffer = Charset.forName("utf8").encode(content);
-//            int len = 0;
-//
-//            while ((len=channel.write(buffer))!=0){
-//
-//            }
             channel.write(buffer);
-
         }
 
     }
@@ -132,6 +130,23 @@ public class ParseUtils {
             items = JSONObject.parseArray(value, Item.class);
         }
         return items;
+    }
+
+    public static InputStream getRespStream(String url){
+        try {
+            CloseableHttpClient conn = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(url);
+            httpGet.addHeader("accept", "*/*");
+            httpGet.addHeader("connection", "Keep-Alive");
+    //            httpGet.addHeader("Content-Type","application/json");
+            httpGet.addHeader("user-agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36");
+            CloseableHttpResponse response = conn.execute(httpGet);
+            InputStream inputStream = response.getEntity().getContent();
+            return inputStream;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

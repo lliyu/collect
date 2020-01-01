@@ -40,6 +40,11 @@ public class RegexUtils {
         return content.replaceAll("<br>", "\r\n");
     }
 
+    /**
+     * 替换图片
+     * @param content
+     * @return
+     */
     public static String replaceImgs(String content){
         String regex = "<img.*?src=\"(.*?)\".*?>";
         Pattern pattern = Pattern.compile(regex);
@@ -53,6 +58,24 @@ public class RegexUtils {
         return content;
     }
 
+    /**
+     * 替换所有的标签
+     * @param content
+     * @return
+     */
+    public static String replaceTitle(String content){
+        return content.replaceAll("<.*?>", "");
+    }
+
+    public static boolean isWebSite(String url){
+        //https://www.meitulu.com/guochan/
+//        String regex = "http[s]?://www\\.[\\w]+\\.";
+        String regex = "(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(url);
+        return matcher.find();
+    }
+
     public static void main(String[] args) {
 //        Map<String, Object> map = new HashMap(2);
 //        map.put("name", "Jame Gosling");
@@ -64,6 +87,6 @@ public class RegexUtils {
         String content = "12.21更新<br><img class=\"BDE_Image\" src=\"http://tiebapic.baidu.com/forum/w%3D580/sign=0145ad2823a85edffa8cfe2b795509d8/368da9773912b31b0d2509519118367adab4e17a.jpg\" size=\"112257\" width=\"450\" height=\"800\" size=\"112257\">";
         content = replaceLineSp(content);
         content = replaceImgs(content);
-        System.out.println(content);
+        System.out.println(isWebSite("https://www. <a href="));
     }
 }

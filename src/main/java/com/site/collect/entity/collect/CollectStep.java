@@ -27,6 +27,9 @@ public class CollectStep implements Serializable {
     @Column(name = "mapping")
     private String mapping;
 
+    @Column(name = "page")
+    private Integer page;
+
     @Column(name = "create_time")
     private Date createTime;
 
@@ -71,6 +74,14 @@ public class CollectStep implements Serializable {
 
     public void setAddr(String addr) {
         this.addr = addr;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
     }
 
     public String getValue() {

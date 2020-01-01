@@ -8,6 +8,7 @@ import com.site.collect.mapper.CollectStepMapper;
 import com.site.collect.pojo.dto.CollectDto;
 import com.site.collect.service.CollectService;
 import com.site.collect.service.ParseSiteService;
+import com.site.collect.utils.RegexUtils;
 import com.site.collect.utils.data.ParseUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 @Service
 public class ParseSiteServiceImpl implements ParseSiteService {
@@ -51,7 +53,7 @@ public class ParseSiteServiceImpl implements ParseSiteService {
                 //第一步和后面过程不太一样
                 //第一步数据完全有用户界面的数据提供
                 //后面过程可能需要从mq中读取前面过程解析出的数据
-            CollectStep collectStep = getCollectStep(1);
+            CollectStep collectStep = getCollectStep(1, collectInfo.getId());
             if (collectStep != null) {
                 parseStep(collectStep);
             }
@@ -99,11 +101,11 @@ public class ParseSiteServiceImpl implements ParseSiteService {
         }
 
         List<HashMap<String, Object>> hashMaps = ParseUtils.regexParseSite(html, collectStep);
+        hashMaps = hashMaps.stream().filter(stringObjectHashMap -> RegexUtils.isWebSite(String.valueOf(stringObjectHashMap.get("url")))).collect(Collectors.toList());
         //将map中的数据推向mq
         hashMaps.stream().forEach(hashMap -> {
             hashMap.put("step", collectStep);
 //            System.out.println("推送消息到mq:" + hashMap);
-            //rabbitTemplate在lambda函数中无法将数据推送到mq中 一道外面可以 ？？？
             rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, hashMap);
 
         });
@@ -124,10 +126,10 @@ public class ParseSiteServiceImpl implements ParseSiteService {
         itemValueMaps.put(item.getName(), res);
     }
 
-    private CollectStep getCollectStep(int i) {
+    private CollectStep getCollectStep(int index, long cid) {
         //查询当前步骤信息
         Example example = new Example(CollectStep.class);
-        example.createCriteria().andEqualTo("index", i);
+        example.createCriteria().andEqualTo("index", index).andEqualTo("collectId", cid);
         return collectStepMapper.selectOneByExample(example);
     }
 
