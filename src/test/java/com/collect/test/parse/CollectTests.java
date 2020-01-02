@@ -29,34 +29,69 @@ public class CollectTests {
     @Test
     public void addCollectSteps(){
 
-        //添加一个collect
-        CollectDto dto = new CollectDto();
-        dto.setCreateTime(new Date());
-        dto.setUpdateTime(new Date());
-        dto.setName("meitu");
-        dto.setStep(2);
-        collectService.add(new CollectDto());
-
-//        CollectDto collect = collectService.getCollectInfoById(1l);
+        CollectDto collect = collectService.getCollectInfoById(1l);
 
         //添加步骤
+        //第一步
         CollectStep step = new CollectStep();
-        step.setCollectId(dto.getId());
-        step.setAddr("https://www.meitulu.com/guochan/");
-        step.setName("meitu采集");
+        step.setCollectId(collect.getId());
+        step.setAddr("https://tieba.baidu.com/f?kw=%E7%BE%8E%E5%A5%B3&ie=utf-8");
+        step.setName("贴吧采集");
         step.setIndex(1);
         //<div.*?d_post_content j_d_post_content[\s\S]*?>.*?[\r\n]*?</div>
-        step.setValue("<div.*?d_post_content j_d_post_content[\\s\\S]*?>(.*?)[\\s\\S]*?</div>");
+//        step.setValue("<div.*?d_post_content j_d_post_content[\\s\\S]*?>(.*?)[\\s\\S]*?</div>");
 
+        //<a href="//tieba.baidu.com/f?kw=%E7%BE%8E%E5%A5%B3&amp;ie=utf-8&amp;pn=2021150" class="last pagination-item ">尾页</a>
         Item item = new Item();
-        item.setName("content");
+        item.setName("page");
+        item.setValue("<a.*?pn=(.*?)\" class=\"last pagination-item \">");
         ArrayList<Item> list = Lists.newArrayList();
         list.add(item);
-
-        step.setMapping(JSONObject.toJSONString(list));
-
+        step.setValue(JSONObject.toJSONString(list));
         ArrayList<CollectStep> objects = Lists.newArrayList();
         objects.add(step);
+
+
+        //第二步
+        step = new CollectStep();
+        step.setCollectId(collect.getId());
+        step.setAddr("https://tieba.baidu.com/f?kw=%E7%BE%8E%E5%A5%B3&ie=utf-8&pn=${page}");
+        step.setName("分页处理");
+        step.setIndex(2);
+        step.setPage(true);
+        objects.add(step);
+
+        //第三步
+        step = new CollectStep();
+        step.setCollectId(collect.getId());
+        step.setAddr("${url}");
+        step.setName("贴吧-item采集");
+        step.setIndex(3);
+
+        item = new Item();
+        item.setName("url,name");
+        item.setValue("<div class=\"threadlist_title pull_left j_th_tit \">[\\s]*<a.*?href=\"(.*?)\".*?>(.*?)</a>[\\S\\s]*?</div>");
+        list = Lists.newArrayList();
+        list.add(item);
+        step.setValue(JSONObject.toJSONString(list));
+
+        objects.add(step);
+
+        //第四步
+        step = new CollectStep();
+        step.setCollectId(collect.getId());
+        step.setAddr("https://tieba.baidu.com${url}?pn=${page}");
+        step.setName("贴吧-item采集");
+        step.setIndex(4);
+
+        item = new Item();
+        item.setName("url,name");
+        item.setValue("<div id=\"post_content.*?d_post_content j_d_post_content.*?>(.*?)</div>");
+        list = Lists.newArrayList();
+        list.add(item);
+        step.setValue(JSONObject.toJSONString(list));
+        objects.add(step);
+
         collectStepService.addSteps(objects);
     }
 

@@ -31,6 +31,9 @@ public class RegexUtils {
             if(o instanceof String){
                 String param = (String) o;
                 content = content.replace(expression, param);
+            }else if(o instanceof Integer){
+                Integer param = (Integer) o;
+                content = content.replace(expression, String.valueOf(param));
             }
         }
         return content;

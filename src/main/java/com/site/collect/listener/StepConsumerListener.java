@@ -1,19 +1,18 @@
 package com.site.collect.listener;
 
-import com.alibaba.fastjson.JSONObject;
 import com.site.collect.constant.RabbitConstant;
 import com.site.collect.entity.collect.CollectStep;
 import com.site.collect.service.CollectStepService;
 import com.site.collect.service.ParseSiteService;
 import com.site.collect.utils.DownloadUtils;
+import com.site.collect.utils.PageDealUtils;
 import com.site.collect.utils.RegexUtils;
 import com.site.collect.utils.data.ParseUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.handler.annotation.Payload;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,6 +28,9 @@ public class StepConsumerListener {
     @Autowired
     private ParseSiteService parseSiteService;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     @RabbitListener(queues = RabbitConstant.STEP_DATA_QUEUE)
     public void process(Map<String, Object> map) throws IOException {
 //        Map<String, Object> map = (Map<String, Object>) message;
@@ -41,6 +43,14 @@ public class StepConsumerListener {
         if (step != null && step instanceof CollectStep) {
             CollectStep collectStep = (CollectStep) step;
             CollectStep parseStep = collectStepService.getStepByCidAndIndex(collectStep);
+            if(parseStep.isPage()){
+                List<Map<String, Object>> maps = PageDealUtils.pageReplace(parseStep, map);
+                maps.stream().forEach(hashMap -> {
+                    hashMap.put("step", parseStep);
+//                    rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, hashMap);
+                });
+                return;
+            }
             if (parseStep != null) {
                 //将内容进行替换
                 parseStep.setAddr(RegexUtils.matchExpression(parseStep.getAddr(), map));

@@ -101,7 +101,7 @@ public class ParseSiteServiceImpl implements ParseSiteService {
         }
 
         List<HashMap<String, Object>> hashMaps = ParseUtils.regexParseSite(html, collectStep);
-        hashMaps = hashMaps.stream().filter(stringObjectHashMap -> RegexUtils.isWebSite(String.valueOf(stringObjectHashMap.get("url")))).collect(Collectors.toList());
+//        hashMaps = hashMaps.stream().filter(stringObjectHashMap -> RegexUtils.isWebSite(String.valueOf(stringObjectHashMap.get("url")))).collect(Collectors.toList());
         //将map中的数据推向mq
         hashMaps.stream().forEach(hashMap -> {
             hashMap.put("step", collectStep);

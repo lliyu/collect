@@ -33,7 +33,7 @@ public class ParseTests {
     @Test
     public void parse(){
         ArrayList<Long> longs = Lists.newArrayList();
-        longs.add(5l);
+        longs.add(1l);
         parseSiteService.parse(longs);
     }
 

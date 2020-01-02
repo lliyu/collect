@@ -98,19 +98,23 @@ public class ParseUtils {
     }
 
     public static List<HashMap<String, Object>> regexParseSite(String html, CollectStep collectStep){
-        List<Item> items = obtainItems(collectStep);
-        //正则解析
-        String regex = collectStep.getValue();
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(html);
         List<HashMap<String, Object>> objects = Lists.newArrayList();
-        while (matcher.find()){
-            HashMap<String, Object> objectObjectHashMap = Maps.newHashMap();
-            for (int i = 0; i < matcher.groupCount(); i++) {
-                objectObjectHashMap.put(items.get(i).getName(), matcher.group(i+1));
+        List<Item> items = obtainItems(collectStep);
+
+        //正则解析
+        items.stream().forEach(item -> {
+            String regex = item.getValue();
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(html);
+            String[] splits = item.getName().split(",");
+            while (matcher.find()){
+                HashMap<String, Object> objectObjectHashMap = Maps.newHashMap();
+                for (int i = 0; i < matcher.groupCount(); i++) {
+                    objectObjectHashMap.put(splits[i], matcher.group(i+1));
+                }
+                objects.add(objectObjectHashMap);
             }
-            objects.add(objectObjectHashMap);
-        }
+        });
         return objects;
     }
 
@@ -123,7 +127,7 @@ public class ParseUtils {
 
     public static List<Item> obtainItems(CollectStep collectStep) {
         //解析具体的步骤
-        String value = collectStep.getMapping();
+        String value = collectStep.getValue();
         List<Item> items = null;
         if (StringUtils.isNotBlank(value)) {
             //从value中获取item集合
