@@ -8,7 +8,6 @@ import com.site.collect.mapper.CollectStepMapper;
 import com.site.collect.pojo.dto.CollectDto;
 import com.site.collect.service.CollectService;
 import com.site.collect.service.ParseSiteService;
-import com.site.collect.utils.RegexUtils;
 import com.site.collect.utils.data.ParseUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -24,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 @Service
 public class ParseSiteServiceImpl implements ParseSiteService {
