@@ -27,7 +27,7 @@ CREATE TABLE `collect` (
   `create_time` timestamp NULL DEFAULT NULL,
   `update_time` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of collect
@@ -44,14 +44,14 @@ CREATE TABLE `collect_step` (
   `cid` bigint(20) NOT NULL COMMENT '所属采集任务',
   `cname` varchar(50) NOT NULL COMMENT '步骤名称',
   `step_index` int(12) NOT NULL COMMENT '该步骤处于哪一步',
-  `mapping` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `mapping` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
   `page` tinyint(4) DEFAULT NULL COMMENT '分页',
-  `addr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '解析地址',
-  `step_value` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '解析规则',
+  `addr` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '解析地址',
+  `step_value` varchar(2000) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '解析规则',
   `create_time` timestamp NULL DEFAULT NULL,
   `update_time` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of collect_step

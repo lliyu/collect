@@ -39,6 +39,9 @@ public class StepConsumerListener {
         //通过map中的stepid取到当前内容是哪一个步骤中的
 
         Object step = map.get("step");
+        if(map.containsKey("website")){
+            System.out.println(map.get("website"));
+        }
 
         if (step != null && step instanceof CollectStep) {
             CollectStep collectStep = (CollectStep) step;
@@ -47,7 +50,7 @@ public class StepConsumerListener {
                 List<Map<String, Object>> maps = PageDealUtils.pageReplace(parseStep, map);
                 maps.stream().forEach(hashMap -> {
                     hashMap.put("step", parseStep);
-//                    rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, hashMap);
+                    rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, hashMap);
                 });
                 return;
             }
@@ -70,14 +73,21 @@ public class StepConsumerListener {
             List<HashMap<String, Object>> hashMaps = ParseUtils.regexParseSite(html, parseStep);
             hashMaps.stream().forEach(hashMap -> {
                 try {
-                    //todo 这里的获取参数不是指接写死的
-                    String content = String.valueOf(hashMap.get("img"));
-                    content = RegexUtils.replaceLineSp(content);
+                    if (parseStep.isEnd()) {
+                        //todo 这里的获取参数不是指接写死的
+                        String content = String.valueOf(hashMap.get("img"));
+                        content = RegexUtils.replaceLineSp(content);
 //                    content = RegexUtils.replaceImgs(content); //md文件中使用
-                    content = RegexUtils.replaceTitle(content);
-                    content = content.replaceAll("\\s", "");
-                    DownloadUtils.downloadImg(parseStep, content);
+                        content = RegexUtils.replaceTitle(content);
+                        content = content.replaceAll("\\s", "");
+                        DownloadUtils.downloadImg(parseStep, content);
 //                    ParseUtils.write2File(filename, content);
+                    }else {
+                        hashMap.put("step", parseStep);
+                        //不是最后一步 写入mq
+                        rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, hashMap);
+                    }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

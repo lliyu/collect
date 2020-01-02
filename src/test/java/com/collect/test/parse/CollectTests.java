@@ -99,53 +99,72 @@ public class CollectTests {
     @Test
     public void addMeituCollectSteps(){
 
-        //添加一个collect
-        CollectDto dto = new CollectDto();
-        dto.setCreateTime(new Date());
-        dto.setUpdateTime(new Date());
-        dto.setName("meitu");
-        dto.setStep(2);
-        Long aLong = collectService.add(dto);
-        dto.setId(aLong);
+        CollectDto dto = collectService.getCollectInfoById(5l);
+
+//        //添加一个collect
+//        CollectDto dto = new CollectDto();
+//        dto.setCreateTime(new Date());
+//        dto.setUpdateTime(new Date());
+//        dto.setName("meitu");
+//        dto.setStep(2);
+//        Long aLong = collectService.add(dto);
+//        dto.setId(aLong);
         //添加步骤
         CollectStep step = new CollectStep();
         step.setCollectId(dto.getId());
         step.setAddr("https://www.meitulu.com/guochan/");
-        step.setName("meitu采集");
+        step.setName("meitu-page采集");
         step.setIndex(1);
-        step.setValue("<p class=p_title><a href=\"https://www.meitulu.com/item/(.*?).html\".*?>(.*?)</a>");
 
         Item item = new Item();
-        item.setName("pid");
-        Item item1 = new Item();
-        item1.setName("name");
+        item.setName("page");
+        item.setValue("<a class=\"a1\">(.*?)条</a>");
         ArrayList<Item> list = Lists.newArrayList();
         list.add(item);
-        list.add(item1);
-
-        step.setMapping(JSONObject.toJSONString(list));
+        step.setValue(JSONObject.toJSONString(list));
 
         ArrayList<CollectStep> objects = Lists.newArrayList();
         objects.add(step);
-        collectStepService.addSteps(objects);
 
-        //second
-        CollectStep step1 = new CollectStep();
-        step1.setCollectId(dto.getId());
-        step1.setAddr("https://www.meitulu.com/item/${pid}_{page}.html");//https://www.meitulu.com/item/${pid}_{page}.html
-        step1.setName("meitu-item采集");
-        step1.setIndex(2);
-        step1.setValue("<img src=\"(.*?)\" class=\"content_img\".*?>");
+        //第二步
+        step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("https://www.meitulu.com/guochan/${page}.html");
+        step.setName("分页处理");
+        step.setIndex(2);
+        step.setPage(true);
+        objects.add(step);
+
+        step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("${url}");
+        step.setName("meitu采集");
+        step.setIndex(3);
+
+        item = new Item();
+        item.setName("website,name");
+        item.setValue("<p class=p_title><a href=\"(.*?)\".*?>(.*?)</a>");
+        list = Lists.newArrayList();
+        list.add(item);
+        step.setValue(JSONObject.toJSONString(list));
+        objects.add(step);
+
+        //第三步
+        step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("${website}");
+        step.setName("meitu-item采集");
+        step.setIndex(4);
 
         item = new Item();
         item.setName("img");
+        item.setValue("<img src=\"(.*?)\" class=\"content_img\".*?>");
         list = Lists.newArrayList();
         list.add(item);
+        step.setValue(JSONObject.toJSONString(list));
 
-        step1.setMapping(JSONObject.toJSONString(list));
+        objects.add(step);
 
-        objects = Lists.newArrayList();
-        objects.add(step1);
         collectStepService.addSteps(objects);
     }
 

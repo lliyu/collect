@@ -30,6 +30,9 @@ public class CollectStep implements Serializable {
     @Column(name = "page")
     private boolean page;
 
+    @Column(name = "end")
+    private boolean end;
+
     @Column(name = "create_time")
     private Date createTime;
 
@@ -78,6 +81,14 @@ public class CollectStep implements Serializable {
 
     public boolean isPage() {
         return page;
+    }
+
+    public boolean isEnd() {
+        return end;
+    }
+
+    public void setEnd(boolean end) {
+        this.end = end;
     }
 
     public void setPage(boolean page) {
