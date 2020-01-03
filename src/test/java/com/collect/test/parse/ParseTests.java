@@ -46,7 +46,7 @@ public class ParseTests {
             html = ParseUtils.testOnlineSite(parseStep.getAddr(), parseStep.getName());
         }
 
-        List<HashMap<String, Object>> hashMaps = ParseUtils.regexParseSite(html, parseStep);
+        List<HashMap<String, Object>> hashMaps = ParseUtils.regexParseSite(html, parseStep, null);
         hashMaps.stream().forEach(hashMap -> {
             System.out.println(hashMap);
         });

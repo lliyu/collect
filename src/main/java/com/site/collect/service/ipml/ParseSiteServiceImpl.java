@@ -15,6 +15,7 @@ import org.jsoup.nodes.Document;
 import org.seimicrawler.xpath.JXDocument;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -92,13 +93,15 @@ public class ParseSiteServiceImpl implements ParseSiteService {
 
     private void regexParse(CollectStep collectStep) throws IOException {
 
-        String html = ParseUtils.readHtml(collectStep.getName());
-        if (StringUtils.isBlank(html)) {
-            //读取为html文件
-            html = ParseUtils.testOnlineSite(collectStep.getAddr(), collectStep.getName());
-        }
+//        String html = ParseUtils.readHtml(collectStep.getName());
+//        if (StringUtils.isBlank(html)) {
+//            //读取为html文件
+//            html = ParseUtils.testOnlineSite(collectStep.getAddr(), collectStep.getName());
+//        }
 
-        List<HashMap<String, Object>> hashMaps = ParseUtils.regexParseSite(html, collectStep);
+        String html = ParseUtils.testOnlineSite(collectStep.getAddr(), collectStep.getName());
+
+        List<HashMap<String, Object>> hashMaps = ParseUtils.regexParseSite(html, collectStep, null);
 //        hashMaps = hashMaps.stream().filter(stringObjectHashMap -> RegexUtils.isWebSite(String.valueOf(stringObjectHashMap.get("url")))).collect(Collectors.toList());
         //将map中的数据推向mq
         hashMaps.stream().forEach(hashMap -> {

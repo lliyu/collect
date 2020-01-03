@@ -1,5 +1,6 @@
 package com.site.collect.utils.data;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +27,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -97,7 +99,7 @@ public class ParseUtils {
         return "";
     }
 
-    public static List<HashMap<String, Object>> regexParseSite(String html, CollectStep collectStep){
+    public static List<HashMap<String, Object>> regexParseSite(String html, CollectStep collectStep, Map<String, Object> params){
         List<HashMap<String, Object>> objects = Lists.newArrayList();
         List<Item> items = obtainItems(collectStep);
 
@@ -108,7 +110,12 @@ public class ParseUtils {
             Matcher matcher = pattern.matcher(html);
             String[] splits = item.getName().split(",");
             while (matcher.find()){
-                HashMap<String, Object> objectObjectHashMap = Maps.newHashMap();
+                HashMap<String, Object> objectObjectHashMap = null;
+                if(params != null){
+                    objectObjectHashMap = JSON.parseObject(JSON.toJSONString(params), HashMap.class);
+                }else {
+                    objectObjectHashMap = Maps.newHashMap();
+                }
                 for (int i = 0; i < matcher.groupCount(); i++) {
                     objectObjectHashMap.put(splits[i], matcher.group(i+1));
                 }

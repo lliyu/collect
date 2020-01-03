@@ -13,6 +13,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -31,6 +32,9 @@ public class StepConsumerListener {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @RabbitListener(queues = RabbitConstant.STEP_DATA_QUEUE)
     public void process(Map<String, Object> map) throws IOException {
 //        Map<String, Object> map = (Map<String, Object>) message;
@@ -46,8 +50,15 @@ public class StepConsumerListener {
         if (step != null && step instanceof CollectStep) {
             CollectStep collectStep = (CollectStep) step;
             CollectStep parseStep = collectStepService.getStepByCidAndIndex(collectStep);
+            if(parseStep.getIndex()==5){
+                System.out.println();
+            }
             if(parseStep.isPage()){
                 List<Map<String, Object>> maps = PageDealUtils.pageReplace(parseStep, map);
+
+//                Map<String, Object> stringObjectMap = maps.get(0);
+//                stringObjectMap.put("step", parseStep);
+//                rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, stringObjectMap);
                 maps.stream().forEach(hashMap -> {
                     hashMap.put("step", parseStep);
                     rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, hashMap);
@@ -68,20 +79,31 @@ public class StepConsumerListener {
             }
 
             //将结果写入文件  目前直接指定 后续可以做成配置项的形式
+            //校验该url是否已经处理过了
+            Object url = redisTemplate.opsForValue().get(parseStep.getAddr());
+            if (url == null) {
+                redisTemplate.opsForValue().set(parseStep.getAddr(), 1);
+            }else {
+                System.out.println("丢弃:" + parseStep.getAddr());
+                return;
+            }
+
             html = ParseUtils.testOnlineSite(parseStep.getAddr(), parseStep.getName());
             String filename = parseStep.getName() + ".html";
-            List<HashMap<String, Object>> hashMaps = ParseUtils.regexParseSite(html, parseStep);
+            List<HashMap<String, Object>> hashMaps = ParseUtils.regexParseSite(html, parseStep, map);
             hashMaps.stream().forEach(hashMap -> {
                 try {
                     if (parseStep.isEnd()) {
                         //todo 这里的获取参数不是指接写死的
+
                         String content = String.valueOf(hashMap.get("img"));
                         content = RegexUtils.replaceLineSp(content);
-//                    content = RegexUtils.replaceImgs(content); //md文件中使用
+//                      content = RegexUtils.replaceImgs(content); //md文件中使用
                         content = RegexUtils.replaceTitle(content);
                         content = content.replaceAll("\\s", "");
+                        parseStep.setName(String.valueOf(map.get("name")));
                         DownloadUtils.downloadImg(parseStep, content);
-//                    ParseUtils.write2File(filename, content);
+//                      ParseUtils.write2File(filename, content);
                     }else {
                         hashMap.put("step", parseStep);
                         //不是最后一步 写入mq

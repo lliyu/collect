@@ -2,7 +2,9 @@ package com.collect.test.parse;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.site.collect.SiteApplication;
+import com.site.collect.constant.RabbitConstant;
 import com.site.collect.entity.collect.CollectStep;
 import com.site.collect.entity.collect.Item;
 import com.site.collect.pojo.dto.CollectDto;
@@ -10,12 +12,14 @@ import com.site.collect.service.CollectService;
 import com.site.collect.service.CollectStepService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SiteApplication.class)
@@ -25,6 +29,9 @@ public class CollectTests {
     private CollectService collectService;
     @Autowired
     private CollectStepService collectStepService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Test
     public void addCollectSteps(){
@@ -135,6 +142,7 @@ public class CollectTests {
         step.setPage(true);
         objects.add(step);
 
+        //第三步
         step = new CollectStep();
         step.setCollectId(dto.getId());
         step.setAddr("${url}");
@@ -142,23 +150,50 @@ public class CollectTests {
         step.setIndex(3);
 
         item = new Item();
-        item.setName("website,name");
-        item.setValue("<p class=p_title><a href=\"(.*?)\".*?>(.*?)</a>");
+        item.setName("pid,name");
+        item.setValue("<p class=p_title><a href=\"https://www.meitulu.com/item/(.*?).html\".*?>(.*?)</a>");
         list = Lists.newArrayList();
         list.add(item);
         step.setValue(JSONObject.toJSONString(list));
         objects.add(step);
 
-        //第三步
+        //第四步
+        //https://www.meitulu.com/item/20197_2.html
         step = new CollectStep();
         step.setCollectId(dto.getId());
-        step.setAddr("${website}");
-        step.setName("meitu-item采集");
+        step.setAddr("https://www.meitulu.com/item/${pid}.html");
+        step.setName("meitu-item-page");
         step.setIndex(4);
 
         item = new Item();
+        item.setName("page");
+        item.setValue("<title>.*?/(.*?).*?</title>");
+        list = Lists.newArrayList();
+        list.add(item);
+        step.setValue(JSONObject.toJSONString(list));
+        objects.add(step);
+
+        //第五步
+        //https://www.meitulu.com/item/20197_2.html
+        step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("https://www.meitulu.com/item/${pid}_${page}.html");
+        step.setName("meitu-item-分页");
+        step.setIndex(5);
+        step.setPage(true);
+        objects.add(step);
+
+        //第六步
+        step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("${url}");
+        step.setName("meitu-item采集");
+        step.setIndex(6);
+        step.setEnd(true);
+
+        item = new Item();
         item.setName("img");
-        item.setValue("<img src=\"(.*?)\" class=\"content_img\".*?>");
+        item.setValue("<img src=\"(.*?)\".*?class=\"content_img\".*?>");
         list = Lists.newArrayList();
         list.add(item);
         step.setValue(JSONObject.toJSONString(list));
@@ -172,5 +207,20 @@ public class CollectTests {
     public void get() throws InterruptedException {
         Thread.sleep(40000);
         CollectDto collect = collectService.getCollectInfoById(1l);
+    }
+
+    @Test
+    public void push() throws InterruptedException {
+        //创建一条数据
+        CollectStep step = new CollectStep();
+        step.setCollectId(5l);
+        step.setIndex(1);
+        CollectStep stepByCidAndIndex = collectStepService.getStepByCidAndIndex(step);
+
+        HashMap<String, Object> objectObjectHashMap = Maps.newHashMap();
+        objectObjectHashMap.put("step", stepByCidAndIndex);
+        objectObjectHashMap.put("url", "https://www.meitulu.com/item/1660_2.html");
+        rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, objectObjectHashMap);
+//        Thread.sleep(20000);
     }
 }
