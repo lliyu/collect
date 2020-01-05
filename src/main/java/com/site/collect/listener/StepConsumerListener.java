@@ -43,9 +43,6 @@ public class StepConsumerListener {
         //通过map中的stepid取到当前内容是哪一个步骤中的
 
         Object step = map.get("step");
-        if(map.containsKey("website")){
-            System.out.println(map.get("website"));
-        }
 
         if (step != null && step instanceof CollectStep) {
             CollectStep collectStep = (CollectStep) step;
@@ -101,7 +98,15 @@ public class StepConsumerListener {
 //                      content = RegexUtils.replaceImgs(content); //md文件中使用
                         content = RegexUtils.replaceTitle(content);
                         content = content.replaceAll("\\s", "");
+                        Object res = redisTemplate.opsForValue().get(content);
+                        if (res == null) {
+                            redisTemplate.opsForValue().set(content, 1);
+                        }else {
+                            System.out.println("丢弃:" + content);
+                            return;
+                        }
                         parseStep.setName(String.valueOf(map.get("name")));
+                        Thread.sleep(500);
                         DownloadUtils.downloadImg(parseStep, content);
 //                      ParseUtils.write2File(filename, content);
                     }else {
@@ -110,7 +115,7 @@ public class StepConsumerListener {
                         rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, hashMap);
                     }
 
-                } catch (IOException e) {
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
             });

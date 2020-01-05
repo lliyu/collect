@@ -21,7 +21,7 @@ public class DownloadUtils {
 
             int indexOf = img.lastIndexOf('.');
             String prefix = img.substring(indexOf);
-            String folder = FileDealUtils.createNewFolder("imgs/" + step.getName());
+            String folder = FileDealUtils.createNewFolder("img/热巴/" + step.getName());
             //获取流并写入文件中
             InputStream respStream = ParseUtils.getRespStream(img);
             File file = new File(folder + "/" + UUID.randomUUID().toString() + prefix);

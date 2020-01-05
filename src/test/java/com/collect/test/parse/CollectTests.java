@@ -151,7 +151,7 @@ public class CollectTests {
 
         item = new Item();
         item.setName("pid,name");
-        item.setValue("<p class=p_title><a href=\"https://www.meitulu.com/item/(.*?).html\".*?>(.*?)</a>");
+        item.setValue("<p class=[\"]?p_title[\"]><a href=\"https://www.meitulu.com/item/(.*?).html\".*?>(.*?)</a>");
         list = Lists.newArrayList();
         list.add(item);
         step.setValue(JSONObject.toJSONString(list));
@@ -167,7 +167,7 @@ public class CollectTests {
 
         item = new Item();
         item.setName("page");
-        item.setValue("<title>.*?/(.*?).*?</title>");
+        item.setValue("<title>.*?/(.*?)页_美图录</title>");
         list = Lists.newArrayList();
         list.add(item);
         step.setValue(JSONObject.toJSONString(list));
@@ -214,12 +214,29 @@ public class CollectTests {
         //创建一条数据
         CollectStep step = new CollectStep();
         step.setCollectId(5l);
+        step.setIndex(2);
+        CollectStep stepByCidAndIndex = collectStepService.getStepByCidAndIndex(step);
+
+        HashMap<String, Object> objectObjectHashMap = Maps.newHashMap();
+        objectObjectHashMap.put("step", stepByCidAndIndex);
+        objectObjectHashMap.put("pid", "14274");
+        objectObjectHashMap.put("name", "[YouMi尤蜜荟] Vol.132 女神@妲己_Toxic");
+        rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, objectObjectHashMap);
+        Thread.sleep(20000);
+    }
+
+    @Test
+    public void pushPage() throws InterruptedException {
+        //创建一条数据
+        CollectStep step = new CollectStep();
+        step.setCollectId(5l);
         step.setIndex(1);
         CollectStep stepByCidAndIndex = collectStepService.getStepByCidAndIndex(step);
 
         HashMap<String, Object> objectObjectHashMap = Maps.newHashMap();
         objectObjectHashMap.put("step", stepByCidAndIndex);
-        objectObjectHashMap.put("url", "https://www.meitulu.com/item/1660_2.html");
+        objectObjectHashMap.put("url", "https://www.meitulu.com/t/1197");
+//        objectObjectHashMap.put("name", "[YouMi尤蜜荟] Vol.132 女神@妲己_Toxic");
         rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, objectObjectHashMap);
 //        Thread.sleep(20000);
     }
