@@ -47,9 +47,7 @@ public class StepConsumerListener {
         if (step != null && step instanceof CollectStep) {
             CollectStep collectStep = (CollectStep) step;
             CollectStep parseStep = collectStepService.getStepByCidAndIndex(collectStep);
-            if(parseStep.getIndex()==5){
-                System.out.println();
-            }
+
             if(parseStep.isPage()){
                 List<Map<String, Object>> maps = PageDealUtils.pageReplace(parseStep, map);
 
@@ -86,18 +84,21 @@ public class StepConsumerListener {
             }
 
             html = ParseUtils.testOnlineSite(parseStep.getAddr(), parseStep.getName());
-            String filename = parseStep.getName() + ".html";
+            String filename = parseStep.getName() + ".md";
             List<HashMap<String, Object>> hashMaps = ParseUtils.regexParseSite(html, parseStep, map);
             hashMaps.stream().forEach(hashMap -> {
                 try {
                     if (parseStep.isEnd()) {
                         //todo 这里的获取参数不是指接写死的
+                        StringBuilder sb = new StringBuilder();
+                        //[name]()
+                        sb.append("[").append(hashMap.get("name")).append("](");
 
                         String content = String.valueOf(hashMap.get("img"));
                         content = RegexUtils.replaceLineSp(content);
-//                      content = RegexUtils.replaceImgs(content); //md文件中使用
                         content = RegexUtils.replaceTitle(content);
                         content = content.replaceAll("\\s", "");
+//                        content = RegexUtils.replaceImgs(content); //md文件中使用
                         Object res = redisTemplate.opsForValue().get(content);
                         if (res == null) {
                             redisTemplate.opsForValue().set(content, 1);
@@ -105,10 +106,13 @@ public class StepConsumerListener {
                             System.out.println("丢弃:" + content);
                             return;
                         }
-                        parseStep.setName(String.valueOf(map.get("name")));
                         Thread.sleep(500);
-                        DownloadUtils.downloadImg(parseStep, content);
-//                      ParseUtils.write2File(filename, content);
+//                        parseStep.setName(String.valueOf(map.get("name")));
+//                        DownloadUtils.downloadImg(parseStep, content);
+                        sb.append("https://www.16hukk.com" + hashMap.get("url")).append(")");
+                        sb.append("\r\n");
+                        sb.append("![](" + content).append(")<hr>");
+                      ParseUtils.write2File(filename, sb.toString());
                     }else {
                         hashMap.put("step", parseStep);
                         //不是最后一步 写入mq

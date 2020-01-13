@@ -38,8 +38,19 @@ public class ObtainWebContentUtils {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(getContent("https://api.bilibili.com/x/tag/info?tag_name=擅长捉弄的高木同学"));
+    public static void main(String[] args) throws IOException {
+//        System.out.println(getContent("https://api.bilibili.com/x/tag/info?tag_name=擅长捉弄的高木同学"));
+        CloseableHttpClient conn = HttpClients.createDefault();
+        HttpGet httpGet = new HttpGet("https://www.16hukk.com/vodtypehtml/32.html");
+        CloseableHttpResponse response = conn.execute(httpGet);
+        InputStream inputStream = response.getEntity().getContent();
+        byte[] bytes = new byte[1024];
+        int index = 0;
+        StringBuilder sb = new StringBuilder();
+        while((index = inputStream.read(bytes))!=-1){
+            sb.append(new String(bytes, "utf-8"));
+        }
+        System.out.println(sb.toString());
     }
 
 }

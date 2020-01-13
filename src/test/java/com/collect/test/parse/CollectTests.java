@@ -204,6 +204,63 @@ public class CollectTests {
     }
 
     @Test
+    public void addkkuCollectSteps(){
+
+        //添加一个collect
+        CollectDto dto = new CollectDto();
+        dto.setCreateTime(new Date());
+        dto.setUpdateTime(new Date());
+        dto.setName("hukk");
+        dto.setStep(2);
+        Long aLong = collectService.add(dto);
+        dto.setId(aLong);
+        //添加步骤
+        CollectStep step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("https://16hukk.com/vodtypehtml/32.html");
+        step.setName("hukk-page采集");
+        step.setIndex(1);
+
+        Item item = new Item();
+        item.setName("page");
+        item.setValue("<li class=\"visible-xs\"><a>1/(.*?)</a></li>");
+        ArrayList<Item> list = Lists.newArrayList();
+        list.add(item);
+        step.setValue(JSONObject.toJSONString(list));
+
+        ArrayList<CollectStep> objects = Lists.newArrayList();
+        objects.add(step);
+
+        //第二步
+        step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("https://16hukk.com/vodtypehtml/32-${page}.html");
+        step.setName("分页处理");
+        step.setIndex(2);
+        step.setPage(true);
+        objects.add(step);
+
+        //第三步
+        step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("${url}");
+        step.setName("hukk-item采集");
+        step.setIndex(3);
+        step.setEnd(true);
+
+        item = new Item();
+        item.setName("img,url,name");
+        //<a class=\"video-pic loading\" data-original=\"(.*?)\" title=\"(.*?)\".*?>
+        item.setValue("<a class=\"video-pic loading\" data-original=\"(.*?)\" href=\"(.*?)\" title=\"(.*?)\".*?>");
+        list = Lists.newArrayList();
+        list.add(item);
+        step.setValue(JSONObject.toJSONString(list));
+        objects.add(step);
+
+        collectStepService.addSteps(objects);
+    }
+
+    @Test
     public void get() throws InterruptedException {
         Thread.sleep(40000);
         CollectDto collect = collectService.getCollectInfoById(1l);
@@ -235,7 +292,7 @@ public class CollectTests {
 
         HashMap<String, Object> objectObjectHashMap = Maps.newHashMap();
         objectObjectHashMap.put("step", stepByCidAndIndex);
-        objectObjectHashMap.put("url", "https://www.meitulu.com/t/1197");
+        objectObjectHashMap.put("url", "https://www.meitulu.com/t/1425/");
 //        objectObjectHashMap.put("name", "[YouMi尤蜜荟] Vol.132 女神@妲己_Toxic");
         rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, objectObjectHashMap);
 //        Thread.sleep(20000);
