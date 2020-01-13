@@ -98,7 +98,6 @@ public class StepConsumerListener {
                         content = RegexUtils.replaceLineSp(content);
                         content = RegexUtils.replaceTitle(content);
                         content = content.replaceAll("\\s", "");
-//                        content = RegexUtils.replaceImgs(content); //md文件中使用
                         Object res = redisTemplate.opsForValue().get(content);
                         if (res == null) {
                             redisTemplate.opsForValue().set(content, 1);

@@ -33,6 +33,9 @@ public class CollectStep implements Serializable {
     @Column(name = "end")
     private boolean end;
 
+    @Column(name = "format")
+    private String format;
+
     @Column(name = "create_time")
     private Date createTime;
 
@@ -89,6 +92,14 @@ public class CollectStep implements Serializable {
 
     public void setEnd(boolean end) {
         this.end = end;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
     }
 
     public void setPage(boolean page) {

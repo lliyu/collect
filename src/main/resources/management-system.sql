@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 13/01/2020 21:44:26
+ Date: 13/01/2020 21:59:17
 */
 
 SET NAMES utf8mb4;
@@ -50,6 +50,7 @@ CREATE TABLE `collect_step` (
   `cname` varchar(50) NOT NULL COMMENT '步骤名称',
   `step_index` int(12) NOT NULL COMMENT '该步骤处于哪一步',
   `mapping` varchar(255) DEFAULT NULL,
+  `format` varchar(2000) DEFAULT NULL COMMENT '结果导出格式',
   `end` tinyint(4) NOT NULL COMMENT '是否最后一步',
   `page` tinyint(4) DEFAULT NULL COMMENT '分页',
   `addr` varchar(255) DEFAULT NULL COMMENT '解析地址',
@@ -63,19 +64,19 @@ CREATE TABLE `collect_step` (
 -- Records of collect_step
 -- ----------------------------
 BEGIN;
-INSERT INTO `collect_step` VALUES (13, 1, '贴吧采集', 1, NULL, 0, 0, 'https://tieba.baidu.com/f?kw=%E7%BE%8E%E5%A5%B3&ie=utf-8', '[{\"name\":\"page\",\"value\":\"<a.*?pn=(.*?)\\\" class=\\\"last pagination-item \\\" >\"}]', '2020-01-02 09:03:48', '2020-01-02 09:03:48');
-INSERT INTO `collect_step` VALUES (14, 1, '分页处理', 2, NULL, 0, 1, 'https://tieba.baidu.com/f?kw=%E7%BE%8E%E5%A5%B3&ie=utf-8&pn=${page}', NULL, '2020-01-02 09:03:48', '2020-01-02 09:03:48');
-INSERT INTO `collect_step` VALUES (15, 1, '贴吧-item采集', 3, NULL, 0, 0, '${url}', '[{\"name\":\"url,name\",\"value\":\"<div class=\\\"threadlist_title pull_left j_th_tit \\\">[\\\\s]*<a.*?href=\\\"(.*?)\\\".*?>(.*?)</a>[\\\\S\\\\s]*?</div>\"}]', '2020-01-02 09:03:48', '2020-01-02 09:03:48');
-INSERT INTO `collect_step` VALUES (16, 1, '贴吧-item采集', 4, NULL, 0, 0, 'https://tieba.baidu.com${url}?pn=${page}', '[{\"name\":\"url,name\",\"value\":\"<div id=\\\"post_content.*?d_post_content j_d_post_content.*?>(.*?)</div>\"}]', '2020-01-02 09:03:48', '2020-01-02 09:03:48');
-INSERT INTO `collect_step` VALUES (38, 5, 'meitu-page采集', 1, NULL, 0, 0, 'https://www.meitulu.com/guochan/', '[{\"name\":\"page\",\"value\":\"<a class=\\\"a1\\\">(.*?)条</a>\"}]', '2020-01-04 02:56:17', '2020-01-04 02:56:17');
-INSERT INTO `collect_step` VALUES (39, 5, '分页处理', 2, NULL, 0, 1, 'https://www.meitulu.com/guochan/${page}.html', NULL, '2020-01-04 02:56:17', '2020-01-04 02:56:17');
-INSERT INTO `collect_step` VALUES (40, 5, 'meitu采集', 3, NULL, 0, 0, '${url}', '[{\"name\":\"pid,name\",\"value\":\"<p class=[\\\"]?p_title[\\\"]><a href=\\\"https://www.meitulu.com/item/(.*?).html\\\".*?>(.*?)</a>\"}]', '2020-01-04 02:56:17', '2020-01-04 02:56:17');
-INSERT INTO `collect_step` VALUES (41, 5, 'meitu-item-page', 4, NULL, 0, 0, 'https://www.meitulu.com/item/${pid}_2.html', '[{\"name\":\"page\",\"value\":\"<title>.*?/(.*?)页_美图录</title>\"}]', '2020-01-04 02:56:17', '2020-01-04 02:56:17');
-INSERT INTO `collect_step` VALUES (42, 5, 'meitu-item-分页', 5, NULL, 0, 1, 'https://www.meitulu.com/item/${pid}_${page}.html', NULL, '2020-01-04 02:56:17', '2020-01-04 02:56:17');
-INSERT INTO `collect_step` VALUES (43, 5, 'meitu-item采集', 6, NULL, 1, 0, '${url}', '[{\"name\":\"img\",\"value\":\"<img src=\\\"(.*?)\\\".*?class=\\\"content_img\\\".*?>\"}]', '2020-01-04 02:56:17', '2020-01-04 02:56:17');
-INSERT INTO `collect_step` VALUES (47, 7, 'hukk-page采集', 1, NULL, 0, 0, 'https://www.16hukk.com/vodtypehtml/32.html', '[{\"name\":\"page\",\"value\":\"<li class=\\\"visible-xs\\\"><a>1/(.*?)</a></li>\"}]', '2020-01-11 05:13:21', '2020-01-11 05:13:21');
-INSERT INTO `collect_step` VALUES (48, 7, '分页处理', 2, NULL, 0, 1, 'https://www.16hukk.com/vodtypehtml/32-${page}.html', NULL, '2020-01-11 05:13:21', '2020-01-11 05:13:21');
-INSERT INTO `collect_step` VALUES (49, 7, 'hukk-item采集', 3, NULL, 1, 0, '${url}', '[{\"name\":\"img,url,name\",\"value\":\"<a class=\\\"video-pic loading\\\" data-original=\\\"(.*?)\\\" href=\\\"(.*?)\\\" title=\\\"(.*?)\\\".*?>\"}]', '2020-01-11 05:13:21', '2020-01-11 05:13:21');
+INSERT INTO `collect_step` VALUES (13, 1, '贴吧采集', 1, NULL, NULL, 0, 0, 'https://tieba.baidu.com/f?kw=%E7%BE%8E%E5%A5%B3&ie=utf-8', '[{\"name\":\"page\",\"value\":\"<a.*?pn=(.*?)\\\" class=\\\"last pagination-item \\\" >\"}]', '2020-01-02 09:03:48', '2020-01-02 09:03:48');
+INSERT INTO `collect_step` VALUES (14, 1, '分页处理', 2, NULL, NULL, 0, 1, 'https://tieba.baidu.com/f?kw=%E7%BE%8E%E5%A5%B3&ie=utf-8&pn=${page}', NULL, '2020-01-02 09:03:48', '2020-01-02 09:03:48');
+INSERT INTO `collect_step` VALUES (15, 1, '贴吧-item采集', 3, NULL, NULL, 0, 0, '${url}', '[{\"name\":\"url,name\",\"value\":\"<div class=\\\"threadlist_title pull_left j_th_tit \\\">[\\\\s]*<a.*?href=\\\"(.*?)\\\".*?>(.*?)</a>[\\\\S\\\\s]*?</div>\"}]', '2020-01-02 09:03:48', '2020-01-02 09:03:48');
+INSERT INTO `collect_step` VALUES (16, 1, '贴吧-item采集', 4, NULL, NULL, 0, 0, 'https://tieba.baidu.com${url}?pn=${page}', '[{\"name\":\"url,name\",\"value\":\"<div id=\\\"post_content.*?d_post_content j_d_post_content.*?>(.*?)</div>\"}]', '2020-01-02 09:03:48', '2020-01-02 09:03:48');
+INSERT INTO `collect_step` VALUES (38, 5, 'meitu-page采集', 1, NULL, NULL, 0, 0, 'https://www.meitulu.com/guochan/', '[{\"name\":\"page\",\"value\":\"<a class=\\\"a1\\\">(.*?)条</a>\"}]', '2020-01-04 02:56:17', '2020-01-04 02:56:17');
+INSERT INTO `collect_step` VALUES (39, 5, '分页处理', 2, NULL, NULL, 0, 1, 'https://www.meitulu.com/guochan/${page}.html', NULL, '2020-01-04 02:56:17', '2020-01-04 02:56:17');
+INSERT INTO `collect_step` VALUES (40, 5, 'meitu采集', 3, NULL, NULL, 0, 0, '${url}', '[{\"name\":\"pid,name\",\"value\":\"<p class=[\\\"]?p_title[\\\"]><a href=\\\"https://www.meitulu.com/item/(.*?).html\\\".*?>(.*?)</a>\"}]', '2020-01-04 02:56:17', '2020-01-04 02:56:17');
+INSERT INTO `collect_step` VALUES (41, 5, 'meitu-item-page', 4, NULL, NULL, 0, 0, 'https://www.meitulu.com/item/${pid}_2.html', '[{\"name\":\"page\",\"value\":\"<title>.*?/(.*?)页_美图录</title>\"}]', '2020-01-04 02:56:17', '2020-01-04 02:56:17');
+INSERT INTO `collect_step` VALUES (42, 5, 'meitu-item-分页', 5, NULL, NULL, 0, 1, 'https://www.meitulu.com/item/${pid}_${page}.html', NULL, '2020-01-04 02:56:17', '2020-01-04 02:56:17');
+INSERT INTO `collect_step` VALUES (43, 5, 'meitu-item采集', 6, NULL, NULL, 1, 0, '${url}', '[{\"name\":\"img\",\"value\":\"<img src=\\\"(.*?)\\\".*?class=\\\"content_img\\\".*?>\"}]', '2020-01-04 02:56:17', '2020-01-04 02:56:17');
+INSERT INTO `collect_step` VALUES (47, 7, 'hukk-page采集', 1, NULL, NULL, 0, 0, 'https://www.16hukk.com/vodtypehtml/32.html', '[{\"name\":\"page\",\"value\":\"<li class=\\\"visible-xs\\\"><a>1/(.*?)</a></li>\"}]', '2020-01-11 05:13:21', '2020-01-11 05:13:21');
+INSERT INTO `collect_step` VALUES (48, 7, '分页处理', 2, NULL, NULL, 0, 1, 'https://www.16hukk.com/vodtypehtml/32-${page}.html', NULL, '2020-01-11 05:13:21', '2020-01-11 05:13:21');
+INSERT INTO `collect_step` VALUES (49, 7, 'hukk-item采集', 3, NULL, NULL, 1, 0, '${url}', '[{\"name\":\"img,url,name\",\"value\":\"<a class=\\\"video-pic loading\\\" data-original=\\\"(.*?)\\\" href=\\\"(.*?)\\\" title=\\\"(.*?)\\\".*?>\"}]', '2020-01-11 05:13:21', '2020-01-11 05:13:21');
 COMMIT;
 
 -- ----------------------------
