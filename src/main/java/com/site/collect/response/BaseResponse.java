@@ -47,4 +47,8 @@ public class BaseResponse implements Serializable {
         this.msg = msg;
         this.data = data;
     }
+
+    public static BaseResponse success(Object data){
+        return new BaseResponse(200, "success", data);
+    }
 }

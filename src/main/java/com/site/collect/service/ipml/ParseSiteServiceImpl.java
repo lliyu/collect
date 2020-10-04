@@ -50,7 +50,7 @@ public class ParseSiteServiceImpl implements ParseSiteService {
                 //这里是所有任务共用一个线程池 还是不同任务有不同的线程池? 目前分为两种线程池
 
                 //第一步和后面过程不太一样
-                //第一步数据完全有用户界面的数据提供
+                //第一步数据完全由用户界面的数据提供
                 //后面过程可能需要从mq中读取前面过程解析出的数据
             CollectStep collectStep = getCollectStep(1, collectInfo.getId());
             if (collectStep != null) {

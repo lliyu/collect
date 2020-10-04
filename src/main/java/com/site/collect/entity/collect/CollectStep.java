@@ -24,6 +24,13 @@ public class CollectStep implements Serializable {
     @Column(name = "step_value")
     private String value;
 
+    /**
+     * 表达式匹配模式
+     * 0:正则
+     * 1：xpath
+     */
+    private Integer mode;
+
     @Column(name = "mapping")
     private String mapping;
 
@@ -32,6 +39,9 @@ public class CollectStep implements Serializable {
 
     @Column(name = "end")
     private boolean end;
+
+    @Column(name = "format_mode")
+    private Integer formatMode;
 
     @Column(name = "format")
     private String format;
@@ -102,8 +112,24 @@ public class CollectStep implements Serializable {
         this.format = format;
     }
 
+    public Integer getFormatMode() {
+        return formatMode;
+    }
+
+    public void setFormatMode(Integer formatMode) {
+        this.formatMode = formatMode;
+    }
+
     public void setPage(boolean page) {
         this.page = page;
+    }
+
+    public Integer getMode() {
+        return mode;
+    }
+
+    public void setMode(Integer mode) {
+        this.mode = mode;
     }
 
     public String getValue() {

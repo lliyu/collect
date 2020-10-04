@@ -42,7 +42,7 @@ public class ExceptionHandle {
         or.setMethod(method);
         or.setCreateTime(new Date());
 //        or.setUid(super.getUserId());
-        or.setFlag("请求出错");
+        or.setFlag("请求出错:" + e.getMessage());
         operatingRecordService.insert(or);
 
 

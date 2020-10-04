@@ -92,7 +92,7 @@ public class ParseUtils {
         //正则解析
         String regex = "<div class=\"headline\">.*?<a href=\"//(.*?)\" title=\"(.*?)\".*?>.*?</div>";
         Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(html.toString());
+        Matcher matcher = pattern.matcher(html);
         if (matcher.find()){
             return matcher.group(1);
         }
@@ -116,6 +116,7 @@ public class ParseUtils {
                 }else {
                     objectObjectHashMap = Maps.newHashMap();
                 }
+                //<div class="article block untagged mb15 typs_hot".*?>[\s\S]*?<a href="/article.*?>[\s\S]*?<div class="content">[\s\S]<span>(.*?[\s\S]*?)</span>.*?[\s\S]*?<div class="thumb">[\s\S]*?<img src="(.*?)" alt.*?>
                 for (int i = 0; i < matcher.groupCount(); i++) {
                     objectObjectHashMap.put(splits[i], matcher.group(i+1));
                 }
@@ -123,6 +124,22 @@ public class ParseUtils {
             }
         });
         return objects;
+    }
+
+    public static JSONObject regexParseForItem(String url, Item item) throws IOException {
+        String html = testOnlineSite(url, "test");
+        String regex = item.getValue();
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(html);
+        String[] splits = item.getName().split(",");
+        JSONObject res = new JSONObject();
+        while (matcher.find()){
+            for (int i = 0; i < matcher.groupCount(); i++) {
+//                objectObjectHashMap.put(splits[i], matcher.group(i+1));
+                res.put(splits[i], matcher.group(i+1));
+            }
+        }
+        return res;
     }
 
     public static List<Object> parse(String url, Item item) throws IOException {

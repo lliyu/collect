@@ -204,6 +204,67 @@ public class CollectTests {
     }
 
     @Test
+    public void addQiubaiCollectSteps(){
+
+//        CollectDto dto = collectService.getCollectInfoById(5l);
+
+//        //添加一个collect
+        CollectDto dto = new CollectDto();
+        dto.setCreateTime(new Date());
+        dto.setUpdateTime(new Date());
+        dto.setName("qiubai");
+        dto.setStep(2);
+        Long aLong = collectService.add(dto);
+        dto.setId(aLong);
+        //添加步骤
+        CollectStep step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("https://www.qiushibaike.com/imgrank/");
+        step.setName("糗百主页e采集");
+        step.setIndex(1);
+
+        Item item = new Item();
+        item.setName("page");
+        item.setValue("<span class=\"page-numbers\">[\\s\\S](.*?)[\\s\\S]</span>");
+        ArrayList<Item> list = Lists.newArrayList();
+        list.add(item);
+        step.setValue(JSONObject.toJSONString(list));
+
+        ArrayList<CollectStep> objects = Lists.newArrayList();
+        objects.add(step);
+
+        //第二步
+        step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("https://www.qiushibaike.com/imgrank/page/${page}/");
+        step.setName("分页处理");
+        step.setIndex(2);
+        step.setPage(true);
+        objects.add(step);
+
+        //第三步
+        step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("${url}");
+        step.setName("糗百故事采集");
+        step.setIndex(3);
+        step.setMode(0);
+        step.setEnd(true);
+        step.setFormatMode(0);
+        step.setFormat("${title}, ![${title}](${img})");
+
+        item = new Item();
+        item.setName("title,img");
+        item.setValue("<div class=\"article block untagged mb15 typs_hot\".*?>[\\s\\S]*?<a href=\"/article.*?>[\\s\\S]*?<div class=\"content\">[\\s\\S]<span>(.*?)[\\s\\S]*?</span>.*?[\\s\\S]*?<div class=\"thumb\">[\\s\\S]*?<img src=\"(.*?)\" alt.*?>");
+        list = Lists.newArrayList();
+        list.add(item);
+        step.setValue(JSONObject.toJSONString(list));
+        objects.add(step);
+
+        collectStepService.addSteps(objects);
+    }
+
+    @Test
     public void addkkuCollectSteps(){
 
         //添加一个collect
@@ -261,6 +322,70 @@ public class CollectTests {
     }
 
     @Test
+    public void addChottieCollectSteps(){
+
+        //添加一个collect
+        CollectDto dto = new CollectDto();
+        dto.setCreateTime(new Date());
+        dto.setUpdateTime(new Date());
+        dto.setName("chottie");
+        dto.setStep(3);
+        Long aLong = collectService.add(dto);
+        dto.setId(aLong);
+        //添加步骤
+        CollectStep step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("https://chottie.com/blog/?s=%E6%9C%B1%E5%8F%AF%E5%84%BF");
+        step.setName("chottie采集");
+        step.setIndex(1);
+
+        Item item = new Item();
+        item.setName("url,name");
+        item.setValue("<h2 class=\"entry-title\"><a href=\"(.*?)\" rel=\"bookmark\">(.*?)</a></h2>");
+        ArrayList<Item> list = Lists.newArrayList();
+        list.add(item);
+        step.setValue(JSONObject.toJSONString(list));
+
+        ArrayList<CollectStep> objects = Lists.newArrayList();
+        objects.add(step);
+
+        //第二步
+        step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("${url}");
+        step.setName("item分页采集");
+        step.setIndex(2);
+
+        item = new Item();
+        item.setName("itemurl");
+        item.setValue("<a href=\"(.*?)\" class=\"post-page-numbers\">");
+        list.clear();
+        list.add(item);
+        step.setValue(JSONObject.toJSONString(list));
+
+        objects.add(step);
+
+        //第三步
+        step = new CollectStep();
+        step.setCollectId(dto.getId());
+        step.setAddr("${itemurl}");
+        step.setName("图片下载");
+        step.setIndex(3);
+        step.setEnd(true);
+
+        item = new Item();
+        item.setName("img");
+        item.setValue("<a href=\"(.*?)\" target=\"_blank\" title=\"Click to see high quality photo\">");
+        list.clear();
+        list.add(item);
+        step.setValue(JSONObject.toJSONString(list));
+        objects.add(step);
+
+
+        collectStepService.addSteps(objects);
+    }
+
+    @Test
     public void get() throws InterruptedException {
         Thread.sleep(40000);
         CollectDto collect = collectService.getCollectInfoById(1l);
@@ -296,5 +421,16 @@ public class CollectTests {
 //        objectObjectHashMap.put("name", "[YouMi尤蜜荟] Vol.132 女神@妲己_Toxic");
         rabbitTemplate.convertAndSend(RabbitConstant.STEP_DATA_EXCHANGE, RabbitConstant.STEP_QUEUE_ROUTINGKEY, objectObjectHashMap);
 //        Thread.sleep(20000);
+    }
+
+    @Test
+    public void testInsertMap(){
+        HashMap<String, String> objectObjectHashMap = new HashMap<>(5);
+        objectObjectHashMap.put("1", "1");
+        objectObjectHashMap.put("2", "1");
+        objectObjectHashMap.put("3", "1");
+        objectObjectHashMap.put("4", "1");
+        objectObjectHashMap.put("5", "1");
+        System.out.println(objectObjectHashMap);
     }
 }

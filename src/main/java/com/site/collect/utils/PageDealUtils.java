@@ -17,8 +17,10 @@ public class PageDealUtils {
         List<Map<String, Object>> objects = Lists.newArrayList();
         String pages = (String) params.get("page");
         int page = Integer.valueOf(pages);
+        if(page > 4)
+            page = 4;
 //        page = page/60;
-        for (int i = 2; i <= page; i++) {
+        for (int i = 1; i <= page; i++) {
             HashMap<String, Object> objectObjectHashMap = JSON.parseObject(JSON.toJSONString(params), HashMap.class);
             objectObjectHashMap.put("page", i);
             String expression = RegexUtils.matchExpression(step.getAddr(), objectObjectHashMap);

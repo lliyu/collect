@@ -38,22 +38,23 @@ public class PermisionTest {
     private CollectStepService stepService;
 
 
-    public List<Permission> getPermi(Long fid){
+    @Test
+    public void getPermi(){
         Example example = new Example(Permission.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("fatherId", fid);
+        criteria.andEqualTo("fatherId", 4l);
         List<Permission> permissions = permissionMapper.selectByExample(example);
-        return permissions;
+        System.out.println(permissions);
     }
 
     public void update(Permission permission){
-        List<Permission> permissions = getPermi(permission.getId());
-        permissions.stream().forEach(permission1 -> {
-            permission1.setLevels(permission.getLevels() + ":" + permission1.getCode());
-            permissionMapper.updateByPrimaryKey(permission1);
-            System.out.println("update:" + permission.getName() + " finished!");
-            update(permission1);
-        });
+//        List<Permission> permissions = getPermi(permission.getId());
+//        permissions.stream().forEach(permission1 -> {
+//            permission1.setLevels(permission.getLevels() + ":" + permission1.getCode());
+//            permissionMapper.updateByPrimaryKey(permission1);
+//            System.out.println("update:" + permission.getName() + " finished!");
+//            update(permission1);
+//        });
     }
 
     @Test

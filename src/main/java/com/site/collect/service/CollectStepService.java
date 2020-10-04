@@ -9,7 +9,16 @@ public interface CollectStepService {
 
     void addSteps(List<CollectStep> stepss);
 
+//    boolean update(List<CollectStep> stepss);
+
     Map<String, List<Object>> test(CollectStep setp);
 
     CollectStep getStepByCidAndIndex(CollectStep step);
+
+    /**
+     * 获取一个采集任务的详细步骤
+     * @param cid
+     * @return
+     */
+    List<CollectStep> getStepsByCid(Integer cid);
 }

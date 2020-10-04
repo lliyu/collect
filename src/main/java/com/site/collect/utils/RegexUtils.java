@@ -1,5 +1,8 @@
 package com.site.collect.utils;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -79,6 +82,17 @@ public class RegexUtils {
         return matcher.find();
     }
 
+    public static List<String> extractPlaceholder(String format){
+        String regex = "\\{(.*?)\\}";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(format);
+        List<String> params = Lists.newArrayList();
+        while (matcher.find()){
+            params.add(matcher.group(1));
+        }
+        return params;
+    }
+
     public static void main(String[] args) {
 //        Map<String, Object> map = new HashMap(2);
 //        map.put("name", "Jame Gosling");
@@ -87,9 +101,11 @@ public class RegexUtils {
 //        String line = "${name} did a great job, so ${alias} did. ${name}";
 //        System.out.println(matchExpression(line, map));
 //
-        String content = "12.21更新<br><img class=\"BDE_Image\" src=\"http://tiebapic.baidu.com/forum/w%3D580/sign=0145ad2823a85edffa8cfe2b795509d8/368da9773912b31b0d2509519118367adab4e17a.jpg\" size=\"112257\" width=\"450\" height=\"800\" size=\"112257\">";
-        content = replaceLineSp(content);
-        content = replaceImgs(content);
-        System.out.println(isWebSite("https://www. <a href="));
+//        String content = "12.21更新<br><img class=\"BDE_Image\" src=\"http://tiebapic.baidu.com/forum/w%3D580/sign=0145ad2823a85edffa8cfe2b795509d8/368da9773912b31b0d2509519118367adab4e17a.jpg\" size=\"112257\" width=\"450\" height=\"800\" size=\"112257\">";
+//        content = replaceLineSp(content);
+//        content = replaceImgs(content);
+//        System.out.println(isWebSite("https://www. <a href="));
+        List<String> strings = extractPlaceholder("[${name}](${url})\\r\\n\\r\\n");
+        strings.stream().forEach(System.out::println);
     }
 }
