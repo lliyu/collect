@@ -206,20 +206,20 @@ public class CollectTests {
     @Test
     public void addQiubaiCollectSteps(){
 
-//        CollectDto dto = collectService.getCollectInfoById(5l);
+        CollectDto dto = collectService.getCollectInfoById(10l);
 
 //        //添加一个collect
-        CollectDto dto = new CollectDto();
-        dto.setCreateTime(new Date());
-        dto.setUpdateTime(new Date());
-        dto.setName("qiubai");
-        dto.setStep(2);
-        Long aLong = collectService.add(dto);
-        dto.setId(aLong);
+//        CollectDto dto = new CollectDto();
+//        dto.setCreateTime(new Date());
+//        dto.setUpdateTime(new Date());
+//        dto.setName("qiubai");
+//        dto.setStep(2);
+//        Long aLong = collectService.add(dto);
+//        dto.setId(aLong);
         //添加步骤
         CollectStep step = new CollectStep();
         step.setCollectId(dto.getId());
-        step.setAddr("https://www.qiushibaike.com/imgrank/");
+        step.setAddr("https://www.qiushibaike.com/video/");
         step.setName("糗百主页e采集");
         step.setIndex(1);
 
@@ -236,7 +236,7 @@ public class CollectTests {
         //第二步
         step = new CollectStep();
         step.setCollectId(dto.getId());
-        step.setAddr("https://www.qiushibaike.com/imgrank/page/${page}/");
+        step.setAddr("https://www.qiushibaike.com/video/page/${page}/");
         step.setName("分页处理");
         step.setIndex(2);
         step.setPage(true);
@@ -248,14 +248,15 @@ public class CollectTests {
         step.setAddr("${url}");
         step.setName("糗百故事采集");
         step.setIndex(3);
-        step.setMode(0);
+        step.setMode(1);
         step.setEnd(true);
         step.setFormatMode(0);
-        step.setFormat("${title}, ![${title}](${img})");
+        step.setFormat("http:${video}");
 
         item = new Item();
-        item.setName("title,img");
-        item.setValue("<div class=\"article block untagged mb15 typs_hot\".*?>[\\s\\S]*?<a href=\"/article.*?>[\\s\\S]*?<div class=\"content\">[\\s\\S]<span>(.*?)[\\s\\S]*?</span>.*?[\\s\\S]*?<div class=\"thumb\">[\\s\\S]*?<img src=\"(.*?)\" alt.*?>");
+        item.setName("video");
+        //[{"name":"video","value":"<div class="article block untagged mb15.*?>[\s\S]*?<source src="(.*?)" type="video/mp4">"}]
+        item.setValue("<div class=\"article block untagged mb15.*?>[\\s\\S]*?<source src=\"(.*?)\" type=\"video/mp4\">");
         list = Lists.newArrayList();
         list.add(item);
         step.setValue(JSONObject.toJSONString(list));

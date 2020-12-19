@@ -42,6 +42,15 @@ public class RegexUtils {
         return content;
     }
 
+    public static boolean matchUrl(String url){
+        String regex = "^((https|http|ftp|rtsp|mms)?:\\/\\/)[^\\s]+";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(url);
+
+        return matcher.find();
+    }
+
     public static String replaceLineSp(String content){
         return content.replaceAll("<br>", "\r\n");
     }

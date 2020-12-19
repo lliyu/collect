@@ -105,7 +105,8 @@ public class StepConsumerListener {
                                 content += "\r\n\r\n";
                                 ParseUtils.write2File(filename, content);
                                 break;
-                            case 1:
+                            case 1://下载
+                                transFormatService.contentDownload(hashMap, parseStep);
                                 break;
                         }
 
@@ -124,7 +125,7 @@ public class StepConsumerListener {
 //                            return;
 //                        }
 //                        parseStep.setName(String.valueOf(map.get("name")));
-////                        DownloadUtils.downloadImg(parseStep, content);
+//                        DownloadUtils.downloadImg(parseStep, content);
 //                        sb.append(content).append(")");
 //                        sb.append("\r\n\r\n");
 //                        sb.append("![](" + content).append(")<hr>");

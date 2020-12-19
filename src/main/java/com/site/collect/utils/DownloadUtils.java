@@ -15,18 +15,18 @@ import java.util.UUID;
  */
 public class DownloadUtils {
 
-    public static void downloadImg(CollectStep step, String img) throws IOException {
-        if (StringUtils.isNotBlank(img)) {
+    public static void downloadImg(CollectStep step, String url) throws IOException {
+        if (StringUtils.isNotBlank(url)) {
             //创建接收流的文件
 
-            int indexOf = img.lastIndexOf('.');
-            String prefix = img.substring(indexOf);
-            String folder = FileDealUtils.createNewFolder("img/映话/" + step.getName());
+            int indexOf = url.lastIndexOf('.');
+            String prefix = url.substring(indexOf);
+            String folder = FileDealUtils.createNewFolder("url/映话/" + step.getName());
             //获取流并写入文件中
-            InputStream respStream = ParseUtils.getRespStream(img);
+            InputStream respStream = ParseUtils.getRespStream(url);
             File file = new File(folder + "/" + UUID.randomUUID().toString() + prefix);
             Files.copy(respStream, file.toPath());
-        }
+        }///Users/liyu/programmer/java/manage-system/src/test/java/resource/url/映话/糗百故事采集/9363f612-b875-4f05-b3ee-4b199bf53645.mp4
     }
 
     public static void main(String[] args) throws IOException {
